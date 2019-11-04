@@ -1,0 +1,183 @@
+        -:    0:Source:unittest1.c
+        -:    0:Graph:unittest1.gcno
+        -:    0:Data:unittest1.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1://NEED TO ZERO OUT GAME STRUCTS AFTER USING THEM!!
+        -:    2:#include "dominion.h"
+        -:    3:#include "dominion_helpers.h"
+        -:    4:#include <string.h>
+        -:    5:#include <stdio.h>
+        -:    6:#include <assert.h>
+        -:    7:#include "rngs.h"
+        -:    8:#include "custom_assert.h"
+        -:    9:
+        -:   10:/*
+        -:   11:    test 1: get rid of estate and have one in hand
+        -:   12:    test 2: get rid of estate, but not have one in hand
+        -:   13:    test 3: gain an estate
+        -:   14:    test 4: try to gain an estate, but no estates in supply
+        -:   15:    test 5: try to gain an estate, but negative amount of estates in supply
+        -:   16:*/
+        -:   17:
+        1:   18:int main()
+        -:   19:{
+        1:   20:    int cardsGained = 0;
+        1:   21:    int discarded = 1;
+        1:   22:    int coinsGained = 0;
+        1:   23:    int shuffledCards = 0;
+        -:   24:
+        -:   25:    int i, j, m;
+        1:   26:    int handpos = 0, choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0;
+        -:   27:    int remove1, remove2;
+        1:   28:    int seed = 1000;
+        1:   29:    int numPlayers = 2;
+        1:   30:    int thisPlayer = 0;
+        -:   31:	struct gameState preG, postG;
+        1:   32:	int k[10] = {adventurer, embargo, village, minion, mine, cutpurse,
+        -:   33:			sea_hag, baron, smithy, council_room};
+        -:   34:
+        -:   35://REPLACE ALL ASSERTS WITH OWN IMPLEMENTATION
+        -:   36:/* 
+        -:   37:    test 1: 
+        -:   38:    to get rid of estate and gain +4 coins 
+        -:   39:*/
+        -:   40:    //could make this test more robust by testing multiple estates
+        -:   41:    //or estates in different positions in the hand
+        -:   42:
+        1:   43:    initializeGame(numPlayers, k, seed, &postG);
+        -:   44:
+        -:   45:    //set players hand
+        1:   46:    postG.hand[thisPlayer][0] = steward;
+        1:   47:	postG.hand[thisPlayer][1] = copper;
+        1:   48:	postG.hand[thisPlayer][2] = duchy;
+        1:   49:	postG.hand[thisPlayer][3] = estate;
+        1:   50:	postG.hand[thisPlayer][4] = feast;
+        1:   51:    postG.coins = 0;
+        -:   52:
+        1:   53:    memcpy(&preG, &postG, sizeof(struct gameState));
+        1:   54:	choice1 = 1;
+        1:   55:	cardEffect(baron, choice1, choice2, choice3, &postG, handpos, &bonus);
+        -:   56:
+        -:   57:    //compare how many buys
+        1:   58:    ASSERT((preG.numBuys + 1) == postG.numBuys);
+        1:   59:    printf("expected = %d, actual = %d\n", preG.numBuys + 1, postG.numBuys);
+        -:   60:    //compare old coins to new coins
+        1:   61:    ASSERT((preG.coins + 4) == postG.coins);
+        1:   62:    printf("expected = %d, actual = %d\n", preG.coins + 4, postG.coins);
+        -:   63:    //compare that card is no longer in hand in both
+        -:   64:    //should remove number 3 in hand
+        5:   65:    for(i = 1; i < postG.handCount[thisPlayer]; i++)
+        -:   66:    {
+        -:   67:        //assert(postG.hand[thisPlayer][i] != estate); //in this case we can just write estate because there is only one estate in our hand
+        -:   68:                                                     //might need to change this in the future
+        4:   69:        ASSERT(postG.hand[thisPlayer][i] != estate);
+        4:   70:        if(postG.hand[thisPlayer][i] == estate)
+        -:   71:        {
+        1:   72:            printf("estate found in hand at %d\n", i);
+        -:   73:        }
+        -:   74:    }
+        1:   75:    ASSERT(postG.handCount[thisPlayer] == preG.handCount[thisPlayer] - 1);
+        1:   76:    printf("Hand count: expected = %d, actual = %d\n", preG.handCount[thisPlayer] - 1, postG.handCount[thisPlayer]);
+        -:   77:    //check to see if other stuff is unaffected, like other players and piles
+        -:   78:
+        -:   79:/* 
+        -:   80:    test 2:
+        -:   81:     to see what happens when player wants to get rid of estate but doesn't have one 
+        -:   82:*/
+        -:   83:
+        -:   84:    //set player hand with no estate
+        1:   85:    postG.hand[thisPlayer][0] = steward;
+        1:   86:	postG.hand[thisPlayer][1] = copper;
+        1:   87:	postG.hand[thisPlayer][2] = duchy;
+        1:   88:	postG.hand[thisPlayer][3] = feast;
+        -:   89:
+        1:   90:    memcpy(&preG, &postG, sizeof(struct gameState));
+        1:   91:	choice1 = 1;
+        1:   92:	cardEffect(baron, choice1, choice2, choice3, &postG, handpos, &bonus);
+        -:   93:
+        -:   94:    //compare how many buys
+        1:   95:    ASSERT((preG.numBuys + 1) == postG.numBuys);
+        1:   96:    printf("Number of Buys: expected: %d, actual: %d", (preG.numBuys + 1), postG.numBuys);
+        -:   97:    //compare old coins to new coins
+        1:   98:    ASSERT(preG.coins == postG.coins);
+        -:   99:
+        -:  100:    //the player should gain an estate at the highest hand pos
+        1:  101:    ASSERT(postG.hand[thisPlayer][preG.handCount[thisPlayer + 1]] == estate);
+        -:  102:
+        -:  103:    //assert(postG.handCount[thisPlayer] == preG.handCount[thisPlayer]);
+        1:  104:    ASSERT(postG.handCount[thisPlayer] == preG.handCount[thisPlayer] + 1);
+        1:  105:    printf("Hand count: expected = %d, actual = %d\n", preG.handCount[thisPlayer] + 1, postG.handCount[thisPlayer]);
+        -:  106:    //check that discard pile is unaffected?
+        -:  107:    //amongest other things
+        -:  108:
+        -:  109:/* 
+        -:  110:    test 3:
+        -:  111:    to what happens when player chooses to gain an estate 
+        -:  112:*/
+        -:  113:
+        -:  114:    //set players hand
+        1:  115:    postG.hand[thisPlayer][0] = steward;
+        1:  116:	postG.hand[thisPlayer][1] = copper;
+        1:  117:	postG.hand[thisPlayer][2] = duchy;
+        1:  118:	postG.hand[thisPlayer][3] = estate;
+        1:  119:	postG.hand[thisPlayer][4] = feast;
+        -:  120:
+        1:  121:    memcpy(&preG, &postG, sizeof(struct gameState));
+        1:  122:	choice1 = 0;
+        1:  123:	cardEffect(baron, choice1, choice2, choice3, &postG, handpos, &bonus);
+        -:  124:
+        -:  125:    //compare how many buys
+        -:  126:    //assert((preG.numBuys + 1) == postG.numBuys);
+        -:  127:    //compare old coins to new coins
+        -:  128:    //assert(preG.coins == postG.coins);
+        -:  129:
+        1:  130:    int numEstates = 0;
+        -:  131:    
+        5:  132:    for(i = 0; i < postG.handCount[thisPlayer]; i++)
+        -:  133:    {
+        -:  134:        //assert(postG.hand[thisPlayer][i] != estate); //in this case we can just write estate because there is only one estate in our hand
+        4:  135:        if(postG.hand[thisPlayer][i] == estate)
+        -:  136:        {
+        1:  137:            numEstates += 1;
+        -:  138:        }
+        -:  139:    }
+        -:  140:    if(numEstates == 2)
+        -:  141:    {
+        -:  142:        //yeet
+        -:  143:    }
+        -:  144:    //assert(postG.handCount[thisPlayer] == preG.handCount[thisPlayer] + 1);
+        -:  145:
+        -:  146:/*
+        -:  147:    test 4:
+        -:  148:*/
+        -:  149:
+        -:  150:/*
+        -:  151:    test 5:
+        -:  152:    expected: to not gain an estate card, everything stays the same, except you get +1 buys
+        -:  153:*/
+        1:  154:    postG.hand[thisPlayer][0] = steward;
+        1:  155:	postG.hand[thisPlayer][1] = copper;
+        1:  156:	postG.hand[thisPlayer][2] = duchy;
+        1:  157:	postG.hand[thisPlayer][3] = estate;
+        1:  158:	postG.hand[thisPlayer][4] = feast;
+        1:  159:    postG.coins = 0;
+        -:  160:
+        1:  161:    memcpy(&preG, &postG, sizeof(struct gameState));
+        1:  162:	choice1 = 0;
+        1:  163:    postG.supplyCount[estate] = -1;
+        1:  164:	cardEffect(baron, choice1, choice2, choice3, &postG, handpos, &bonus);
+        -:  165:
+        -:  166:    //compare how many buys
+        1:  167:    ASSERT((preG.numBuys + 1) == postG.numBuys);
+        1:  168:    printf("expected = %d, actual = %d\n", preG.numBuys + 1, postG.numBuys);
+        -:  169:    //compare old coins to new coins
+        1:  170:    ASSERT(preG.coins == postG.coins);
+        1:  171:    printf("expected = %d, actual = %d\n", preG.coins, postG.coins);
+        -:  172:    
+        1:  173:    ASSERT(postG.handCount[thisPlayer] == preG.handCount[thisPlayer]);
+        1:  174:    printf("Hand count: expected = %d, actual = %d\n", preG.handCount[thisPlayer], postG.handCount[thisPlayer]);
+        -:  175:    //check to see if other stuff is unaffected, like other players and piles
+        -:  176:
+        1:  177:    return 0;
+        -:  178:}

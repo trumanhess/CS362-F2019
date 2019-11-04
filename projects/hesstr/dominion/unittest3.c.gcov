@@ -1,0 +1,139 @@
+        -:    0:Source:unittest3.c
+        -:    0:Graph:unittest3.gcno
+        -:    0:Data:unittest3.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include "dominion.h"
+        -:    2:#include "dominion_helpers.h"
+        -:    3:#include <string.h>
+        -:    4:#include <stdio.h>
+        -:    5:#include <assert.h>
+        -:    6:#include "rngs.h"
+        -:    7:
+        -:    8:/*
+        -:    9:    check player has +1 action in all of these
+        -:   10:    test 1: first option, gain +2 coins
+        -:   11:    test 2: second option, have 5 cards and try to gain a new set, check new set of cards (?)
+        -:   12:            player 2 will have 4 cards and should not gain a new set
+        -:   13:    test 3: second option, have 3 cards and check new set of cards (?)
+        -:   14:            player 2 will have 5 cards and should gain a new set
+        -:   15:    more tests?
+        -:   16:*/
+        -:   17:
+        1:   18:int main()
+        -:   19:{
+        1:   20:    int cardsGained = 0;
+        1:   21:    int cardsDiscarded = 0;
+        1:   22:    int coinsGained = 0;
+        1:   23:    int shuffledCards = 0;
+        -:   24:
+        -:   25:    int i, j, m;
+        1:   26:    int handpos = 0, choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0;
+        -:   27:    int remove1, remove2;
+        1:   28:    int seed = 1000;
+        1:   29:    int numPlayers = 2;
+        1:   30:    int player1 = 0;
+        1:   31:    int player2 = 1;
+        -:   32:	struct gameState preG, postG;
+        1:   33:	int k[10] = {adventurer, silver, copper, gold, mine, minion,
+        -:   34:			sea_hag, baron, smithy, council_room};
+        -:   35:
+        -:   36://REPLACE ALL //assertS WITH OWN IMPLEMENTATION
+        1:   37:    initializeGame(numPlayers, k, seed, &postG);
+        -:   38:
+        -:   39:/*
+        -:   40:    test 1: first option, gain +2 coins
+        -:   41:    expect to gain +2 coins
+        -:   42:*/
+        1:   43:    coinsGained = 2;
+        -:   44:
+        1:   45:    postG.hand[player1][0] = minion;
+        1:   46:	postG.hand[player1][1] = copper;
+        1:   47:	postG.hand[player1][2] = duchy;
+        1:   48:	postG.hand[player1][3] = estate;
+        1:   49:	postG.hand[player1][4] = mine;
+        -:   50:
+        1:   51:    postG.hand[player2][0] = minion;
+        1:   52:	postG.hand[player2][1] = copper;
+        1:   53:	postG.hand[player2][2] = duchy;
+        1:   54:	postG.hand[player2][3] = estate;
+        1:   55:	postG.hand[player2][4] = mine;
+        -:   56:
+        1:   57:    memcpy(&preG, &postG, sizeof(struct gameState));
+        1:   58:    choice1 = 1; //choose to gain +2 coins
+        1:   59:	cardEffect(minion, choice1, choice2, choice3, &postG, handpos, &bonus);
+        -:   60:
+        -:   61:    //assert(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
+        -:   62:    //assert(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
+        -:   63:    //assert(preG.coins + coinsGained == postG.coins);
+        -:   64:
+        -:   65:    //assert(preG.handCount[player2] + 0 - 0 == postG.handCount[player2]);
+        -:   66:    //assert(preG.deckCount[player2] - 0 == postG.deckCount[player2]);
+        -:   67:
+        -:   68:/*
+        -:   69:    test 2: second option, have 5 cards and check new set of cards (?)
+        -:   70:    player 2 will have 4 cards and should not gain a new set
+        -:   71:    expect for player 1 to have a new hand and player 2 to keep hand
+        -:   72:*/
+        1:   73:    cardsGained = 4;
+        1:   74:    cardsDiscarded = 5;
+        1:   75:    coinsGained = 0;
+        -:   76:
+        1:   77:    postG.hand[player1][0] = minion;
+        1:   78:	postG.hand[player1][1] = copper;
+        1:   79:	postG.hand[player1][2] = duchy;
+        1:   80:	postG.hand[player1][3] = estate;
+        1:   81:	postG.hand[player1][4] = mine;
+        -:   82:
+        1:   83:    postG.hand[player2][0] = minion;
+        1:   84:	postG.hand[player2][1] = copper;
+        1:   85:	postG.hand[player2][2] = duchy;
+        1:   86:	postG.hand[player2][3] = estate;
+        -:   87:
+        1:   88:    memcpy(&preG, &postG, sizeof(struct gameState));
+        1:   89:    choice1 = 1; //choose to gain +2 coins
+        1:   90:	cardEffect(minion, choice1, choice2, choice3, &postG, handpos, &bonus);
+        -:   91:
+        -:   92:    //assert(preG.handCount[player1] + cardsGained == postG.handCount[player1]);
+        -:   93:    //assert(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
+        -:   94:    //assert(preG.coins + coinsGained == postG.coins);
+        -:   95:
+        -:   96:    //assert(preG.handCount[player2] + 0 - 0 == postG.handCount[player2]);
+        -:   97:    //assert(preG.deckCount[player2] - 0 == postG.deckCount[player2]);
+        -:   98:
+        -:   99:    //need to check how discard pile was affected?
+        -:  100:
+        -:  101:/*
+        -:  102:    test 3: second option, have 3 cards and check new set of cards (?)
+        -:  103:    player 2 will have 5 cards and should gain a new set
+        -:  104:    expect player one to gain a new hand and player 2 to gain a new hand
+        -:  105:*/
+        1:  106:    cardsGained = 4;
+        1:  107:    cardsDiscarded = 3;
+        1:  108:    coinsGained = 0;
+        -:  109:
+        1:  110:    postG.hand[player1][0] = minion;
+        1:  111:	postG.hand[player1][1] = copper;
+        1:  112:	postG.hand[player1][2] = duchy;
+        -:  113:
+        1:  114:    postG.hand[player2][0] = minion;
+        1:  115:	postG.hand[player2][1] = copper;
+        1:  116:	postG.hand[player2][2] = duchy;
+        1:  117:	postG.hand[player2][3] = estate;
+        1:  118:    postG.hand[player2][4] = mine;
+        -:  119:
+        1:  120:    memcpy(&preG, &postG, sizeof(struct gameState));
+        1:  121:    choice1 = 1; //choose to gain +2 coins
+        1:  122:	cardEffect(minion, choice1, choice2, choice3, &postG, handpos, &bonus);
+        -:  123:
+        -:  124:    //assert(preG.handCount[player1] + cardsGained == postG.handCount[player1]);
+        -:  125:    //assert(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
+        -:  126:    //assert(preG.coins + coinsGained == postG.coins);
+        -:  127:
+        -:  128:    //assert(preG.handCount[player2] + 4 == postG.handCount[player2]);
+        -:  129:    //assert(preG.deckCount[player2] - 4 == postG.deckCount[player2]);
+        -:  130:
+        -:  131:    //check discard piles for change
+        -:  132:
+        1:  133:    return 0;
+        -:  134:}

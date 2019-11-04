@@ -1,0 +1,185 @@
+        -:    0:Source:unittest4.c
+        -:    0:Graph:unittest4.gcno
+        -:    0:Data:unittest4.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include "dominion.h"
+        -:    2:#include "dominion_helpers.h"
+        -:    3:#include <string.h>
+        -:    4:#include <stdio.h>
+        -:    5:#include <assert.h>
+        -:    6:#include "rngs.h"
+        -:    7:
+        -:    8://tribute card
+        -:    9:/*
+        -:   10:    test 1: player2 has no cards
+        -:   11:    test 2: player2 has one card in hand (copper)
+        -:   12:    test 3: player2 has one card in deck (action card)
+        -:   13:    test 4: player2 has a hand of five cards (victory card, action card)
+        -:   14:    test 5: player2 has a hand of five cards (copper, copper)
+        -:   15:*/
+        -:   16:
+        1:   17:int main()
+        -:   18:{
+        -:   19:    /*
+        -:   20:    int numPlayers; //number of players
+        -:   21:    int supplyCount[treasure_map+1];  //this is the amount of a specific type of card given a specific number.
+        -:   22:    int embargoTokens[treasure_map+1];
+        -:   23:    int outpostPlayed;
+        -:   24:    int outpostTurn;
+        -:   25:    int whoseTurn;
+        -:   26:    int phase;
+        -:   27:    int numActions; /* Starts at 1 each turn
+        -:   28:    int coins; /* Use as you see fit!
+        -:   29:    int numBuys; /* Starts at 1 each turn
+        -:   30:    int hand[MAX_PLAYERS][MAX_HAND];
+        -:   31:    int handCount[MAX_PLAYERS];
+        -:   32:    int deck[MAX_PLAYERS][MAX_DECK];
+        -:   33:    int deckCount[MAX_PLAYERS];
+        -:   34:    int discard[MAX_PLAYERS][MAX_DECK];
+        -:   35:    int discardCount[MAX_PLAYERS];
+        -:   36:    int playedCards[MAX_DECK];
+        -:   37:    int playedCardCount;
+        -:   38:    */
+        1:   39:    int cardsGained = 0;
+        1:   40:    int cardsDiscarded = 0;
+        1:   41:    int coinsGained = 0;
+        1:   42:    int shuffledCards = 0;
+        1:   43:    int actionsGained = 0;
+        1:   44:    int buysGained = 0;
+        -:   45:
+        -:   46:
+        -:   47:
+        -:   48:    int i, j, m;
+        1:   49:    int handpos = 0, choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0;
+        -:   50:    int remove1, remove2;
+        1:   51:    int seed = 1000;
+        1:   52:    int numPlayers = 2;
+        1:   53:    int player1 = 0;
+        1:   54:    int player2 = 1;
+        -:   55:	struct gameState preG, postG;
+        1:   56:	int k[10] = {adventurer, silver, copper, gold, mine, minion,
+        -:   57:			sea_hag, baron, smithy, council_room};
+        -:   58:
+        -:   59://REPLACE ALL //assertS WITH OWN IMPLEMENTATION
+        1:   60:    initializeGame(numPlayers, k, seed, &postG);
+        -:   61:
+        -:   62:/*
+        -:   63:    test 1: player2 has no cards
+        -:   64:    expect: no change
+        -:   65:*/
+        1:   66:    postG.hand[player1][0] = minion;
+        1:   67:	postG.hand[player1][1] = copper;
+        1:   68:	postG.hand[player1][2] = tribute;
+        1:   69:	postG.hand[player1][3] = estate;
+        1:   70:	postG.hand[player1][4] = mine;
+        -:   71:
+        1:   72:    memcpy(&preG, &postG, sizeof(struct gameState));
+        1:   73:	cardEffect(tribute, choice1, choice2, choice3, &postG, handpos, &bonus);
+        -:   74:
+        -:   75:    //assert(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
+        -:   76:    //assert(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
+        -:   77:    //assert(preG.coins + coinsGained == postG.coins);
+        -:   78:
+        -:   79:/*
+        -:   80:    test 2: player2 has one card in hand (copper)
+        -:   81:    expect: player1 gain +2 coin; player2 one less card in hand (potentially a full deck because he would shuffle a new hand?)
+        -:   82:*/
+        1:   83:    postG.hand[player1][0] = minion;
+        1:   84:	postG.hand[player1][1] = copper;
+        1:   85:	postG.hand[player1][2] = tribute;
+        1:   86:	postG.hand[player1][3] = estate;
+        1:   87:	postG.hand[player1][4] = mine;
+        -:   88:
+        1:   89:    postG.hand[player2][0] = copper;
+        -:   90:
+        1:   91:    memcpy(&preG, &postG, sizeof(struct gameState));
+        1:   92:    coinsGained = 2;
+        1:   93:	cardEffect(tribute, choice1, choice2, choice3, &postG, handpos, &bonus);
+        -:   94:
+        -:   95:    //assert(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
+        -:   96:    //assert(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
+        -:   97:    //assert(preG.coins + coinsGained == postG.coins);
+        -:   98:
+        -:   99:    //assert(preG.handCount[player2] - 1 == postG.handCount[player2]);
+        -:  100:
+        -:  101:/*
+        -:  102:    test 3: player2 has one card in deck (action card)
+        -:  103:    expect: player1 gain +2 actions; player2 to have one less card in deck (maybe he will have more from a shuffle?)
+        -:  104:*/
+        1:  105:    postG.hand[player1][0] = minion;
+        1:  106:	postG.hand[player1][1] = copper;
+        1:  107:	postG.hand[player1][2] = tribute;
+        1:  108:	postG.hand[player1][3] = estate;
+        1:  109:	postG.hand[player1][4] = mine;
+        -:  110:
+        1:  111:    postG.deck[player2][0] = tribute;
+        1:  112:    actionsGained = 2;
+        1:  113:    memcpy(&preG, &postG, sizeof(struct gameState));
+        -:  114:    
+        1:  115:	cardEffect(tribute, choice1, choice2, choice3, &postG, handpos, &bonus);
+        -:  116:
+        -:  117:    //assert(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
+        -:  118:    //assert(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
+        -:  119:    //assert(preG.coins + coinsGained == postG.coins);
+        -:  120:    //assert(preG.numActions + actionsGained == postG.numActions);
+        -:  121:
+        -:  122:    //assert(preG.deckCount[player2] - 1 == postG.deckCount[player2]);
+        -:  123:
+        -:  124:/*
+        -:  125:    test 4: player2 has a hand of five cards (victory card, action card)
+        -:  126:    expect: player1 gains +2 cards and +2 actions; player2 loses two cards from hand
+        -:  127:*/
+        1:  128:    postG.hand[player1][0] = minion;
+        1:  129:	postG.hand[player1][1] = copper;
+        1:  130:	postG.hand[player1][2] = tribute;
+        1:  131:	postG.hand[player1][3] = estate;
+        1:  132:	postG.hand[player1][4] = mine;
+        -:  133:
+        1:  134:    postG.hand[player2][0] = minion;
+        1:  135:	postG.hand[player2][1] = estate;
+        1:  136:	postG.hand[player2][2] = tribute;
+        1:  137:	postG.hand[player2][3] = estate;
+        1:  138:	postG.hand[player2][4] = mine;
+        -:  139:
+        1:  140:    memcpy(&preG, &postG, sizeof(struct gameState));
+        1:  141:    actionsGained = 2;
+        1:  142:    cardsGained = 2;
+        1:  143:	cardEffect(tribute, choice1, choice2, choice3, &postG, handpos, &bonus);
+        -:  144:
+        -:  145:    //assert(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
+        -:  146:    //assert(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
+        -:  147:    //assert(preG.coins + coinsGained == postG.coins);
+        -:  148:    //assert(preG.numActions + actionsGained == postG.numActions);
+        -:  149:
+        -:  150:    //assert(preG.handCount[player2] - 2 == postG.handCount[player2]);
+        -:  151:
+        -:  152:/*
+        -:  153:    test 5: player2 has a hand of five cards (copper, copper)
+        -:  154:    expect: player1 gains +2 coins; player2 loses two cards (?)
+        -:  155:*/
+        1:  156:    postG.hand[player1][0] = minion;
+        1:  157:	postG.hand[player1][1] = copper;
+        1:  158:	postG.hand[player1][2] = tribute;
+        1:  159:	postG.hand[player1][3] = estate;
+        1:  160:	postG.hand[player1][4] = mine;
+        -:  161:
+        1:  162:    postG.hand[player2][0] = copper;
+        1:  163:	postG.hand[player2][1] = copper;
+        1:  164:	postG.hand[player2][2] = tribute;
+        1:  165:	postG.hand[player2][3] = estate;
+        1:  166:	postG.hand[player2][4] = mine;
+        -:  167:
+        1:  168:    memcpy(&preG, &postG, sizeof(struct gameState));
+        1:  169:    coinsGained = 2;
+        1:  170:	cardEffect(tribute, choice1, choice2, choice3, &postG, handpos, &bonus);
+        -:  171:
+        -:  172:    //assert(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
+        -:  173:    //assert(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
+        -:  174:    //assert(preG.coins + coinsGained == postG.coins);
+        -:  175:    //assert(preG.numActions + actionsGained == postG.numActions);
+        -:  176:
+        -:  177:    //assert(preG.handCount[player2] - 2 == postG.handCount[player2]);
+        -:  178:
+        1:  179:    return 0;
+        -:  180:}
