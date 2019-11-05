@@ -7,7 +7,7 @@
         -:    2:#include "dominion_helpers.h"
         -:    3:#include <string.h>
         -:    4:#include <stdio.h>
-        -:    5:#include <assert.h>
+        -:    5:#include "custom_assert.h"
         -:    6:#include "rngs.h"
         -:    7:
         -:    8://tribute card
@@ -77,9 +77,9 @@
         1:   72:    memcpy(&preG, &postG, sizeof(struct gameState));
         1:   73:	cardEffect(tribute, choice1, choice2, choice3, &postG, handpos, &bonus);
         -:   74:
-        -:   75:    //assert(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
-        -:   76:    //assert(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
-        -:   77:    //assert(preG.coins + coinsGained == postG.coins);
+        1:   75:    ASSERT(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
+        1:   76:    ASSERT(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
+        1:   77:    ASSERT(preG.coins + coinsGained == postG.coins);
         -:   78:
         -:   79:/*
         -:   80:    test 2: player2 has one card in hand (copper)
@@ -97,11 +97,11 @@
         1:   92:    coinsGained = 2;
         1:   93:	cardEffect(tribute, choice1, choice2, choice3, &postG, handpos, &bonus);
         -:   94:
-        -:   95:    //assert(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
-        -:   96:    //assert(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
-        -:   97:    //assert(preG.coins + coinsGained == postG.coins);
+        1:   95:    ASSERT(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
+        1:   96:    ASSERT(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
+        1:   97:    ASSERT(preG.coins + coinsGained == postG.coins);
         -:   98:
-        -:   99:    //assert(preG.handCount[player2] - 1 == postG.handCount[player2]);
+        1:   99:    ASSERT(preG.handCount[player2] - 1 == postG.handCount[player2]);
         -:  100:
         -:  101:/*
         -:  102:    test 3: player2 has one card in deck (action card)
@@ -119,12 +119,12 @@
         -:  114:    
         1:  115:	cardEffect(tribute, choice1, choice2, choice3, &postG, handpos, &bonus);
         -:  116:
-        -:  117:    //assert(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
-        -:  118:    //assert(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
-        -:  119:    //assert(preG.coins + coinsGained == postG.coins);
-        -:  120:    //assert(preG.numActions + actionsGained == postG.numActions);
+        1:  117:    ASSERT(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
+        1:  118:    ASSERT(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
+        1:  119:    ASSERT(preG.coins + coinsGained == postG.coins);
+        1:  120:    ASSERT(preG.numActions + actionsGained == postG.numActions);
         -:  121:
-        -:  122:    //assert(preG.deckCount[player2] - 1 == postG.deckCount[player2]);
+        1:  122:    ASSERT(preG.deckCount[player2] - 1 == postG.deckCount[player2]);
         -:  123:
         -:  124:/*
         -:  125:    test 4: player2 has a hand of five cards (victory card, action card)
@@ -147,12 +147,12 @@
         1:  142:    cardsGained = 2;
         1:  143:	cardEffect(tribute, choice1, choice2, choice3, &postG, handpos, &bonus);
         -:  144:
-        -:  145:    //assert(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
-        -:  146:    //assert(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
-        -:  147:    //assert(preG.coins + coinsGained == postG.coins);
-        -:  148:    //assert(preG.numActions + actionsGained == postG.numActions);
+        1:  145:    ASSERT(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
+        1:  146:    ASSERT(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
+        1:  147:    ASSERT(preG.coins + coinsGained == postG.coins);
+        1:  148:    ASSERT(preG.numActions + actionsGained == postG.numActions);
         -:  149:
-        -:  150:    //assert(preG.handCount[player2] - 2 == postG.handCount[player2]);
+        1:  150:    ASSERT(preG.handCount[player2] - 2 == postG.handCount[player2]);
         -:  151:
         -:  152:/*
         -:  153:    test 5: player2 has a hand of five cards (copper, copper)
@@ -174,12 +174,12 @@
         1:  169:    coinsGained = 2;
         1:  170:	cardEffect(tribute, choice1, choice2, choice3, &postG, handpos, &bonus);
         -:  171:
-        -:  172:    //assert(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
-        -:  173:    //assert(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
-        -:  174:    //assert(preG.coins + coinsGained == postG.coins);
-        -:  175:    //assert(preG.numActions + actionsGained == postG.numActions);
+        1:  172:    ASSERT(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
+        1:  173:    ASSERT(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
+        1:  174:    ASSERT(preG.coins + coinsGained == postG.coins);
+        1:  175:    ASSERT(preG.numActions + actionsGained == postG.numActions);
         -:  176:
-        -:  177:    //assert(preG.handCount[player2] - 2 == postG.handCount[player2]);
+        1:  177:    ASSERT(preG.handCount[player2] - 2 == postG.handCount[player2]);
         -:  178:
         1:  179:    return 0;
         -:  180:}

@@ -2,7 +2,7 @@
 #include "dominion_helpers.h"
 #include <string.h>
 #include <stdio.h>
-#include <assert.h>
+#include "custom_assert.h"
 #include "rngs.h"
 
 //tribute card
