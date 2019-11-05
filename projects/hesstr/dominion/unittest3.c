@@ -2,7 +2,7 @@
 #include "dominion_helpers.h"
 #include <string.h>
 #include <stdio.h>
-#include <assert.h>
+#include "custom_assert.h"
 #include "rngs.h"
 
 /*
@@ -58,12 +58,12 @@ int main()
     choice1 = 1; //choose to gain +2 coins
 	cardEffect(minion, choice1, choice2, choice3, &postG, handpos, &bonus);
 
-    //assert(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
-    //assert(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
-    //assert(preG.coins + coinsGained == postG.coins);
+    ASSERT(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
+    ASSERT(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
+    ASSERT(preG.coins + coinsGained == postG.coins);
 
-    //assert(preG.handCount[player2] + 0 - 0 == postG.handCount[player2]);
-    //assert(preG.deckCount[player2] - 0 == postG.deckCount[player2]);
+    ASSERT(preG.handCount[player2] + 0 - 0 == postG.handCount[player2]);
+    ASSERT(preG.deckCount[player2] - 0 == postG.deckCount[player2]);
 
 /*
     test 2: second option, have 5 cards and check new set of cards (?)
@@ -89,12 +89,12 @@ int main()
     choice1 = 1; //choose to gain +2 coins
 	cardEffect(minion, choice1, choice2, choice3, &postG, handpos, &bonus);
 
-    //assert(preG.handCount[player1] + cardsGained == postG.handCount[player1]);
-    //assert(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
-    //assert(preG.coins + coinsGained == postG.coins);
+    ASSERT(preG.handCount[player1] + cardsGained == postG.handCount[player1]);
+    ASSERT(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
+    ASSERT(preG.coins + coinsGained == postG.coins);
 
-    //assert(preG.handCount[player2] + 0 - 0 == postG.handCount[player2]);
-    //assert(preG.deckCount[player2] - 0 == postG.deckCount[player2]);
+    ASSERT(preG.handCount[player2] + 0 - 0 == postG.handCount[player2]);
+    ASSERT(preG.deckCount[player2] - 0 == postG.deckCount[player2]);
 
     //need to check how discard pile was affected?
 
@@ -121,12 +121,12 @@ int main()
     choice1 = 1; //choose to gain +2 coins
 	cardEffect(minion, choice1, choice2, choice3, &postG, handpos, &bonus);
 
-    //assert(preG.handCount[player1] + cardsGained == postG.handCount[player1]);
-    //assert(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
-    //assert(preG.coins + coinsGained == postG.coins);
+    ASSERT(preG.handCount[player1] + cardsGained == postG.handCount[player1]);
+    ASSERT(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
+    ASSERT(preG.coins + coinsGained == postG.coins);
 
-    //assert(preG.handCount[player2] + 4 == postG.handCount[player2]);
-    //assert(preG.deckCount[player2] - 4 == postG.deckCount[player2]);
+    ASSERT(preG.handCount[player2] + 4 == postG.handCount[player2]);
+    ASSERT(preG.deckCount[player2] - 4 == postG.deckCount[player2]);
 
     //check discard piles for change
 

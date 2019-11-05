@@ -3,7 +3,6 @@
 #include "dominion_helpers.h"
 #include <string.h>
 #include <stdio.h>
-#include <assert.h>
 #include "rngs.h"
 #include "custom_assert.h"
 
@@ -18,13 +17,11 @@
 int main()
 {
     int cardsGained = 0;
-    int discarded = 1;
+    int discarded = 0;
     int coinsGained = 0;
     int shuffledCards = 0;
 
-    int i, j, m;
     int handpos = 0, choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0;
-    int remove1, remove2;
     int seed = 1000;
     int numPlayers = 2;
     int thisPlayer = 0;
@@ -32,11 +29,14 @@ int main()
 	int k[10] = {adventurer, embargo, village, minion, mine, cutpurse,
 			sea_hag, baron, smithy, council_room};
 
+    printf("\n\n-------------Testing Baron---------\n\n");
+
 //REPLACE ALL ASSERTS WITH OWN IMPLEMENTATION
 /* 
-    test 1: 
-    to get rid of estate and gain +4 coins 
+    test 1: get rid of estate and have one in hand
+    expect: to get rid of estate and gain +4 coins 
 */
+    printf("Test 1:\n");
     //could make this test more robust by testing multiple estates
     //or estates in different positions in the hand
 
@@ -52,6 +52,7 @@ int main()
 
     memcpy(&preG, &postG, sizeof(struct gameState));
 	choice1 = 1;
+    discarded = 1;
 	cardEffect(baron, choice1, choice2, choice3, &postG, handpos, &bonus);
 
     //compare how many buys
@@ -62,7 +63,7 @@ int main()
     printf("expected = %d, actual = %d\n", preG.coins + 4, postG.coins);
     //compare that card is no longer in hand in both
     //should remove number 3 in hand
-    for(i = 1; i < postG.handCount[thisPlayer]; i++)
+    for(int i = 1; i < postG.handCount[thisPlayer]; i++)
     {
         //assert(postG.hand[thisPlayer][i] != estate); //in this case we can just write estate because there is only one estate in our hand
                                                      //might need to change this in the future
@@ -77,9 +78,10 @@ int main()
     //check to see if other stuff is unaffected, like other players and piles
 
 /* 
-    test 2:
-     to see what happens when player wants to get rid of estate but doesn't have one 
+    test 2: get rid of estate, but not have one in hand
+    expect: gain an estate
 */
+    printf("Test 2:\n");
 
     //set player hand with no estate
     postG.hand[thisPlayer][0] = steward;
@@ -89,18 +91,23 @@ int main()
 
     memcpy(&preG, &postG, sizeof(struct gameState));
 	choice1 = 1;
+    cardsGained = 1;
 	cardEffect(baron, choice1, choice2, choice3, &postG, handpos, &bonus);
 
     //compare how many buys
+    printf("Numer of Buys:\n");
     ASSERT((preG.numBuys + 1) == postG.numBuys);
-    printf("Number of Buys: expected: %d, actual: %d", (preG.numBuys + 1), postG.numBuys);
+    printf("\texpected: %d, actual: %d\n", (preG.numBuys + 1), postG.numBuys);
     //compare old coins to new coins
+    printf("Number of Coins:\n");
     ASSERT(preG.coins == postG.coins);
+    printf("\texpected: %d, actual: %d\n", preG.coins, postG.coins);
 
     //the player should gain an estate at the highest hand pos
     ASSERT(postG.hand[thisPlayer][preG.handCount[thisPlayer + 1]] == estate);
 
     //assert(postG.handCount[thisPlayer] == preG.handCount[thisPlayer]);
+    printf("Hand count:\n");
     ASSERT(postG.handCount[thisPlayer] == preG.handCount[thisPlayer] + 1);
     printf("Hand count: expected = %d, actual = %d\n", preG.handCount[thisPlayer] + 1, postG.handCount[thisPlayer]);
     //check that discard pile is unaffected?
@@ -129,7 +136,7 @@ int main()
 
     int numEstates = 0;
     
-    for(i = 0; i < postG.handCount[thisPlayer]; i++)
+    for(int i = 0; i < postG.handCount[thisPlayer]; i++)
     {
         //assert(postG.hand[thisPlayer][i] != estate); //in this case we can just write estate because there is only one estate in our hand
         if(postG.hand[thisPlayer][i] == estate)
@@ -173,6 +180,8 @@ int main()
     ASSERT(postG.handCount[thisPlayer] == preG.handCount[thisPlayer]);
     printf("Hand count: expected = %d, actual = %d\n", preG.handCount[thisPlayer], postG.handCount[thisPlayer]);
     //check to see if other stuff is unaffected, like other players and piles
+
+    printf("\n\n-------------End Testing Baron---------------\n\n");
 
     return 0;
 }

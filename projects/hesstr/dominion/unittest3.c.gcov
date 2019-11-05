@@ -7,7 +7,7 @@
         -:    2:#include "dominion_helpers.h"
         -:    3:#include <string.h>
         -:    4:#include <stdio.h>
-        -:    5:#include <assert.h>
+        -:    5:#include "custom_assert.h"
         -:    6:#include "rngs.h"
         -:    7:
         -:    8:/*
@@ -63,12 +63,12 @@
         1:   58:    choice1 = 1; //choose to gain +2 coins
         1:   59:	cardEffect(minion, choice1, choice2, choice3, &postG, handpos, &bonus);
         -:   60:
-        -:   61:    //assert(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
-        -:   62:    //assert(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
-        -:   63:    //assert(preG.coins + coinsGained == postG.coins);
+        1:   61:    ASSERT(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
+        1:   62:    ASSERT(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
+        1:   63:    ASSERT(preG.coins + coinsGained == postG.coins);
         -:   64:
-        -:   65:    //assert(preG.handCount[player2] + 0 - 0 == postG.handCount[player2]);
-        -:   66:    //assert(preG.deckCount[player2] - 0 == postG.deckCount[player2]);
+        1:   65:    ASSERT(preG.handCount[player2] + 0 - 0 == postG.handCount[player2]);
+        1:   66:    ASSERT(preG.deckCount[player2] - 0 == postG.deckCount[player2]);
         -:   67:
         -:   68:/*
         -:   69:    test 2: second option, have 5 cards and check new set of cards (?)
@@ -94,12 +94,12 @@
         1:   89:    choice1 = 1; //choose to gain +2 coins
         1:   90:	cardEffect(minion, choice1, choice2, choice3, &postG, handpos, &bonus);
         -:   91:
-        -:   92:    //assert(preG.handCount[player1] + cardsGained == postG.handCount[player1]);
-        -:   93:    //assert(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
-        -:   94:    //assert(preG.coins + coinsGained == postG.coins);
+        1:   92:    ASSERT(preG.handCount[player1] + cardsGained == postG.handCount[player1]);
+        1:   93:    ASSERT(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
+        1:   94:    ASSERT(preG.coins + coinsGained == postG.coins);
         -:   95:
-        -:   96:    //assert(preG.handCount[player2] + 0 - 0 == postG.handCount[player2]);
-        -:   97:    //assert(preG.deckCount[player2] - 0 == postG.deckCount[player2]);
+        1:   96:    ASSERT(preG.handCount[player2] + 0 - 0 == postG.handCount[player2]);
+        1:   97:    ASSERT(preG.deckCount[player2] - 0 == postG.deckCount[player2]);
         -:   98:
         -:   99:    //need to check how discard pile was affected?
         -:  100:
@@ -126,12 +126,12 @@
         1:  121:    choice1 = 1; //choose to gain +2 coins
         1:  122:	cardEffect(minion, choice1, choice2, choice3, &postG, handpos, &bonus);
         -:  123:
-        -:  124:    //assert(preG.handCount[player1] + cardsGained == postG.handCount[player1]);
-        -:  125:    //assert(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
-        -:  126:    //assert(preG.coins + coinsGained == postG.coins);
+        1:  124:    ASSERT(preG.handCount[player1] + cardsGained == postG.handCount[player1]);
+        1:  125:    ASSERT(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
+        1:  126:    ASSERT(preG.coins + coinsGained == postG.coins);
         -:  127:
-        -:  128:    //assert(preG.handCount[player2] + 4 == postG.handCount[player2]);
-        -:  129:    //assert(preG.deckCount[player2] - 4 == postG.deckCount[player2]);
+        1:  128:    ASSERT(preG.handCount[player2] + 4 == postG.handCount[player2]);
+        1:  129:    ASSERT(preG.deckCount[player2] - 4 == postG.deckCount[player2]);
         -:  130:
         -:  131:    //check discard piles for change
         -:  132:
