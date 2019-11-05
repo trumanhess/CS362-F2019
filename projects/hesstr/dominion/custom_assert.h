@@ -3,7 +3,7 @@
     {} \
     else \
     { \
-        printf("\tError, Assertion Failed:\n"); \
+        printf("\n\tError, Assertion Failed:\n"); \
         printf("\t"); \
         printf(#expr); \
         printf(" on line %d", __LINE__); \

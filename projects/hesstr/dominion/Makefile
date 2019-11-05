@@ -33,7 +33,7 @@ runtests: unittest1.c unittest2.c unittest3.c unittest4.c
 	gcov -f unittest2.c >> unittestresult.out
 	gcov -f unittest3.c >> unittestresult.out
 	gcov -f unittest4.c >> unittestresult.out
-	gcov -f dominion.c >> unittestresult.out
+	gcov -fb dominion.c >> unittestresult.out
 	cat dominion.c.gcov >> unittestresult.out
 
 
