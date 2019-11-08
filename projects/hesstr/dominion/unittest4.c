@@ -10,8 +10,8 @@
     test 1: player2 has no cards
     test 2: player2 has one card in deck (copper) CHANGED
     test 3: player2 has one card in discard pile (action card) CHANGED
-    test 4: player2 has a hand of five cards (victory card, action card)
-    test 5: player2 has a hand of five cards but duplicate (copper, copper)
+    test 4: player2 has a deck of five cards (treasure card, action card)
+    test 5: player2 has a deck of five cards but duplicate (copper, copper)
 */
 
 int universalTest(struct gameState *pre, struct gameState *post, int discarded, int cardsGained, int buysGained, int coinsGained, int actionsGained, int player)
@@ -31,6 +31,8 @@ int universalTest(struct gameState *pre, struct gameState *post, int discarded, 
     printf("Hand count:\n");
     ASSERT(post->handCount[player] == pre->handCount[player] - discarded + cardsGained);
     printf("\texpected = %d, actual = %d\n", pre->handCount[player] - discarded + cardsGained, post->handCount[player]);
+
+    return 0;
 }
 
 int main()
@@ -84,6 +86,7 @@ int main()
 	preG.hand[player1][2] = tribute;
 	preG.hand[player1][3] = estate;
 	preG.hand[player1][4] = mine;
+    preG.handCount[player1] = 5;
 
     preG.handCount[player2] = 0;
     preG.deckCount[player2] = 0;
@@ -114,7 +117,9 @@ int main()
 	preG.hand[player1][3] = estate;
 	preG.hand[player1][4] = mine;
 
-    preG.hand[player2][0] = copper;
+    preG.deck[player2][0] = copper;
+    preG.deckCount[player2] = 1;
+    preG.discardCount[player2] = 0;
 
     memcpy(&postG, &preG, sizeof(struct gameState));
     cardsDiscarded = 0;
@@ -144,6 +149,9 @@ int main()
 	preG.hand[player1][4] = mine;
 
     preG.deck[player2][0] = tribute;
+    preG.deckCount[player2] = 1;
+    preG.discardCount[player2] = 0;
+
     cardsDiscarded = 0;
     buysGained = 0;
     coinsGained = 0;
@@ -168,30 +176,37 @@ int main()
     printf("\n\nTest 4:\n");
 
     preG.hand[player1][0] = minion;
-	preG.hand[player1][1] = copper;
+	preG.hand[player1][1] = tribute;
 	preG.hand[player1][2] = tribute;
 	preG.hand[player1][3] = estate;
 	preG.hand[player1][4] = mine;
+    preG.handCount[player1] = 5;
 
-    preG.hand[player2][0] = minion;
-	preG.hand[player2][1] = estate;
-	preG.hand[player2][2] = tribute;
-	preG.hand[player2][3] = estate;
-	preG.hand[player2][4] = mine;
+    preG.deck[player2][0] = copper;
+	preG.deck[player2][1] = copper;
+	preG.deck[player2][2] = copper;
+	preG.deck[player2][3] = tribute;
+	preG.deck[player2][4] = estate;
+
+    /*preG.hand[player2][0] = copper;
+	preG.hand[player2][1] = copper;
+	preG.hand[player2][2] = copper;
+	preG.hand[player2][3] = tribute;
+	preG.hand[player2][4] = copper;*/
+
+    preG.deckCount[player2] = 5;
+    preG.discardCount[player2] = 0;
+    preG.handCount[player2] = 0;
 
     memcpy(&postG, &preG, sizeof(struct gameState));
     cardsDiscarded = 0;
     buysGained = 0;
-    coinsGained = 0;
+    coinsGained = 2;
     actionsGained = 2;
-    cardsGained = 2;
+    cardsGained = 0;
 	tributeLogic(&postG, player1, player2);
 
     universalTest(&preG, &postG, cardsDiscarded, cardsGained, buysGained, coinsGained, actionsGained, player1);
-    /*ASSERT(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
-    ASSERT(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
-    ASSERT(preG.coins + coinsGained == postG.coins);
-    ASSERT(preG.numActions + actionsGained == postG.numActions);*/
 
     ASSERT(preG.handCount[player2] - 2 == postG.handCount[player2]);
 
@@ -207,11 +222,11 @@ int main()
 	preG.hand[player1][3] = estate;
 	preG.hand[player1][4] = mine;
 
-    preG.hand[player2][0] = copper;
-	preG.hand[player2][1] = copper;
-	preG.hand[player2][2] = tribute;
-	preG.hand[player2][3] = estate;
-	preG.hand[player2][4] = mine;
+    preG.deck[player2][0] = copper;
+	preG.deck[player2][1] = copper;
+	preG.deck[player2][2] = tribute;
+	preG.deck[player2][3] = estate;
+	preG.deck[player2][4] = mine;
 
     memcpy(&postG, &preG, sizeof(struct gameState));
     cardsDiscarded = 0;

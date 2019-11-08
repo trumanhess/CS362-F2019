@@ -863,7 +863,7 @@ int tributeLogic(struct gameState *state, int currentPlayer, int nextPlayer)
         tributeRevealedCards[1] = -1;
     }
 
-    for (int i = 0; i <= 2; i ++) 
+    for (int i = 0; i <= 2; i++) 
     {
         if (tributeRevealedCards[i] == copper || tributeRevealedCards[i] == silver || tributeRevealedCards[i] == gold) 
         { //Treasure cards

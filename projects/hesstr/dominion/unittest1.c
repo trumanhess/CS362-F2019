@@ -88,7 +88,7 @@ int main()
 	baronLogic(choice1, &postG, thisPlayer);
 
     universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
-    for(int i = 1; i < postG.handCount[thisPlayer]; i++)
+    for(int i = 0; i < postG.handCount[thisPlayer]; i++)
     {
         ASSERT(postG.hand[thisPlayer][i] != estate);
         if(postG.hand[thisPlayer][i] == estate)
@@ -120,25 +120,10 @@ int main()
 	baronLogic(choice1, &postG, thisPlayer);
     printf("postG: %d\n", postG.numBuys);
 
-    //compare how many buys
-    /*printf("Numer of Buys:\n");
-    ASSERT((preG.numBuys + buysGained) == postG.numBuys);
-    printf("\texpected: %d, actual: %d\n", (preG.numBuys + buysGained), postG.numBuys);
-    //compare old coins to new coins
-    printf("Number of Coins:\n");
-    ASSERT(preG.coins == postG.coins);
-    printf("\texpected: %d, actual: %d\n", preG.coins, postG.coins);*/
     universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
 
     //the player should gain an estate at the highest hand pos
-    ASSERT(postG.hand[thisPlayer][preG.handCount[thisPlayer + 1]] == estate);
-
-    //assert(postG.handCount[thisPlayer] == preG.handCount[thisPlayer]);
-    /*printf("Hand count:\n");
-    ASSERT(postG.handCount[thisPlayer] == preG.handCount[thisPlayer] + cardsGained);
-    printf("\texpected = %d, actual = %d\n", preG.handCount[thisPlayer] + cardsGained, postG.handCount[thisPlayer]);*/
-    //check that discard pile is unaffected?
-    //amongest other things
+    ASSERT(postG.hand[thisPlayer][preG.handCount[thisPlayer] + 1] == estate);
 
 /* 
     test 3:

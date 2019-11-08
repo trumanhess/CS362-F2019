@@ -93,10 +93,10 @@
         1:   88:	baronLogic(choice1, &postG, thisPlayer);
         -:   89:
         1:   90:    universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
-        5:   91:    for(int i = 1; i < postG.handCount[thisPlayer]; i++)
+        6:   91:    for(int i = 0; i < postG.handCount[thisPlayer]; i++)
         -:   92:    {
-        4:   93:        ASSERT(postG.hand[thisPlayer][i] != estate);
-        4:   94:        if(postG.hand[thisPlayer][i] == estate)
+        5:   93:        ASSERT(postG.hand[thisPlayer][i] != estate);
+        5:   94:        if(postG.hand[thisPlayer][i] == estate)
         -:   95:        {
         1:   96:            printf("estate found in hand at %d\n", i);
         -:   97:        }
@@ -125,97 +125,82 @@
         1:  120:	baronLogic(choice1, &postG, thisPlayer);
         1:  121:    printf("postG: %d\n", postG.numBuys);
         -:  122:
-        -:  123:    //compare how many buys
-        -:  124:    /*printf("Numer of Buys:\n");
-        -:  125:    ASSERT((preG.numBuys + buysGained) == postG.numBuys);
-        -:  126:    printf("\texpected: %d, actual: %d\n", (preG.numBuys + buysGained), postG.numBuys);
-        -:  127:    //compare old coins to new coins
-        -:  128:    printf("Number of Coins:\n");
-        -:  129:    ASSERT(preG.coins == postG.coins);
-        -:  130:    printf("\texpected: %d, actual: %d\n", preG.coins, postG.coins);*/
-        1:  131:    universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
-        -:  132:
-        -:  133:    //the player should gain an estate at the highest hand pos
-        1:  134:    ASSERT(postG.hand[thisPlayer][preG.handCount[thisPlayer + 1]] == estate);
-        -:  135:
-        -:  136:    //assert(postG.handCount[thisPlayer] == preG.handCount[thisPlayer]);
-        -:  137:    /*printf("Hand count:\n");
-        -:  138:    ASSERT(postG.handCount[thisPlayer] == preG.handCount[thisPlayer] + cardsGained);
-        -:  139:    printf("\texpected = %d, actual = %d\n", preG.handCount[thisPlayer] + cardsGained, postG.handCount[thisPlayer]);*/
-        -:  140:    //check that discard pile is unaffected?
-        -:  141:    //amongest other things
-        -:  142:
-        -:  143:/* 
-        -:  144:    test 3:
-        -:  145:    to what happens when player chooses to gain an estate 
-        -:  146:*/
-        1:  147:    printf("\n\nTest 3:\n");
+        1:  123:    universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
+        -:  124:
+        -:  125:    //the player should gain an estate at the highest hand pos
+        1:  126:    ASSERT(postG.hand[thisPlayer][preG.handCount[thisPlayer] + 1] == estate);
+        -:  127:
+        -:  128:/* 
+        -:  129:    test 3:
+        -:  130:    to what happens when player chooses to gain an estate 
+        -:  131:*/
+        1:  132:    printf("\n\nTest 3:\n");
+        -:  133:
+        -:  134:    //set players hand
+        1:  135:    preG.hand[thisPlayer][0] = steward;
+        1:  136:	preG.hand[thisPlayer][1] = copper;
+        1:  137:	preG.hand[thisPlayer][2] = duchy;
+        1:  138:	preG.hand[thisPlayer][3] = feast;
+        -:  139:
+        1:  140:    memcpy(&postG, &preG, sizeof(struct gameState));
+        1:  141:	choice1 = 0;
+        1:  142:    discarded = 0;
+        1:  143:    buysGained = 1;
+        1:  144:    coinsGained = 0;
+        1:  145:    actionsGained = 0;
+        1:  146:    cardsGained = 1;
+        1:  147:	baronLogic(choice1, &postG, thisPlayer);
         -:  148:
-        -:  149:    //set players hand
-        1:  150:    preG.hand[thisPlayer][0] = steward;
-        1:  151:	preG.hand[thisPlayer][1] = copper;
-        1:  152:	preG.hand[thisPlayer][2] = duchy;
-        1:  153:	preG.hand[thisPlayer][3] = feast;
-        -:  154:
-        1:  155:    memcpy(&postG, &preG, sizeof(struct gameState));
-        1:  156:	choice1 = 0;
-        1:  157:    discarded = 0;
-        1:  158:    buysGained = 1;
-        1:  159:    coinsGained = 0;
-        1:  160:    actionsGained = 0;
-        1:  161:    cardsGained = 1;
-        1:  162:	baronLogic(choice1, &postG, thisPlayer);
-        -:  163:
-        -:  164:    //compare how many buys
-        -:  165:    /*ASSERT((preG.numBuys + buysGained) == postG.numBuys);
-        -:  166:    //compare old coins to new coins
-        -:  167:    ASSERT(preG.coins == postG.coins);*/
-        1:  168:    universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
-        1:  169:    ASSERT(postG.hand[thisPlayer][postG.handCount[thisPlayer]] == estate);
-        -:  170:
-        -:  171:    /*ASSERT(postG.handCount[thisPlayer] == preG.handCount[thisPlayer] + cardsGained);*/
+        -:  149:    //compare how many buys
+        -:  150:    /*ASSERT((preG.numBuys + buysGained) == postG.numBuys);
+        -:  151:    //compare old coins to new coins
+        -:  152:    ASSERT(preG.coins == postG.coins);*/
+        1:  153:    universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
+        1:  154:    ASSERT(postG.hand[thisPlayer][postG.handCount[thisPlayer]] == estate);
+        -:  155:
+        -:  156:    /*ASSERT(postG.handCount[thisPlayer] == preG.handCount[thisPlayer] + cardsGained);*/
+        -:  157:
+        -:  158:/*
+        -:  159:    test 4:
+        -:  160:    expected: to not gain an estate card, everything stays the same, except you get +1 buys
+        -:  161:*/
+        1:  162:    printf("\n\nTest 4:\n");
+        -:  163:    //memcpy(&postG, &placeHolder, sizeof(struct gameState));
+        -:  164:
+        1:  165:    preG.hand[thisPlayer][0] = steward;
+        1:  166:	preG.hand[thisPlayer][1] = copper;
+        1:  167:	preG.hand[thisPlayer][2] = duchy;
+        1:  168:	preG.hand[thisPlayer][3] = estate;
+        1:  169:	preG.hand[thisPlayer][4] = feast;
+        1:  170:    preG.supplyCount[estate] = -1;
+        1:  171:    preG.handCount[thisPlayer] = 5;
         -:  172:
-        -:  173:/*
-        -:  174:    test 4:
-        -:  175:    expected: to not gain an estate card, everything stays the same, except you get +1 buys
-        -:  176:*/
-        1:  177:    printf("\n\nTest 4:\n");
-        -:  178:    //memcpy(&postG, &placeHolder, sizeof(struct gameState));
-        -:  179:
-        1:  180:    preG.hand[thisPlayer][0] = steward;
-        1:  181:	preG.hand[thisPlayer][1] = copper;
-        1:  182:	preG.hand[thisPlayer][2] = duchy;
-        1:  183:	preG.hand[thisPlayer][3] = estate;
-        1:  184:	preG.hand[thisPlayer][4] = feast;
-        1:  185:    preG.supplyCount[estate] = -1;
-        1:  186:    preG.handCount[thisPlayer] = 5;
-        -:  187:
-        1:  188:    memcpy(&postG, &preG, sizeof(struct gameState));
-        1:  189:	choice1 = 0;
-        1:  190:    discarded = 0;
-        1:  191:    buysGained = 1;
-        1:  192:    coinsGained = 0;
-        1:  193:    actionsGained = 0;
-        1:  194:    cardsGained = 0;
-        1:  195:	baronLogic(choice1, &postG, thisPlayer);
-        -:  196:
-        -:  197:    //compare how many buys
-        -:  198:    /*printf("Number Buys:\n");
-        -:  199:    ASSERT((preG.numBuys + buysGained) == postG.numBuys);
-        -:  200:    printf("expected = %d, actual = %d\n", preG.numBuys + buysGained, postG.numBuys);
-        -:  201:    //compare old coins to new coins
-        -:  202:    printf("Number coins:\n");
-        -:  203:    ASSERT(preG.coins + coinsGained == postG.coins);
-        -:  204:    printf("expected = %d, actual = %d\n", preG.coins + coinsGained, postG.coins);
-        -:  205:    
-        -:  206:    printf("Hand count:\n");
-        -:  207:    ASSERT(postG.handCount[thisPlayer] == preG.handCount[thisPlayer] + cardsGained);
-        -:  208:    printf("expected = %d, actual = %d\n", preG.handCount[thisPlayer] + cardsGained, postG.handCount[thisPlayer]);
-        -:  209:    //check to see if other stuff is unaffected, like other players and piles*/
-        1:  210:    universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
-        1:  211:    ASSERT(postG.supplyCount[estate] == preG.supplyCount[estate]);
-        -:  212:
-        1:  213:    printf("\n\n-------------End Testing Baron---------------\n\n");
-        -:  214:
-        1:  215:    return 0;
-        -:  216:}
+        1:  173:    memcpy(&postG, &preG, sizeof(struct gameState));
+        1:  174:	choice1 = 0;
+        1:  175:    discarded = 0;
+        1:  176:    buysGained = 1;
+        1:  177:    coinsGained = 0;
+        1:  178:    actionsGained = 0;
+        1:  179:    cardsGained = 0;
+        1:  180:	baronLogic(choice1, &postG, thisPlayer);
+        -:  181:
+        -:  182:    //compare how many buys
+        -:  183:    /*printf("Number Buys:\n");
+        -:  184:    ASSERT((preG.numBuys + buysGained) == postG.numBuys);
+        -:  185:    printf("expected = %d, actual = %d\n", preG.numBuys + buysGained, postG.numBuys);
+        -:  186:    //compare old coins to new coins
+        -:  187:    printf("Number coins:\n");
+        -:  188:    ASSERT(preG.coins + coinsGained == postG.coins);
+        -:  189:    printf("expected = %d, actual = %d\n", preG.coins + coinsGained, postG.coins);
+        -:  190:    
+        -:  191:    printf("Hand count:\n");
+        -:  192:    ASSERT(postG.handCount[thisPlayer] == preG.handCount[thisPlayer] + cardsGained);
+        -:  193:    printf("expected = %d, actual = %d\n", preG.handCount[thisPlayer] + cardsGained, postG.handCount[thisPlayer]);
+        -:  194:    //check to see if other stuff is unaffected, like other players and piles*/
+        1:  195:    universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
+        1:  196:    ASSERT(postG.supplyCount[estate] == preG.supplyCount[estate]);
+        -:  197:
+        1:  198:    printf("\n\n-------------End Testing Baron---------------\n\n");
+        -:  199:
+        1:  200:    return 0;
+        -:  201:}
