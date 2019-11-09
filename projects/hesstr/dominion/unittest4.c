@@ -101,9 +101,6 @@ int main()
 	tributeLogic(&postG, player1, player2);
 
     universalTest(&preG, &postG, cardsDiscarded, cardsGained, buysGained, coinsGained, actionsGained, player1);
-    /*ASSERT(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
-    ASSERT(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
-    ASSERT(preG.coins + coinsGained == postG.coins);*/
 
 /*
     test 2: player2 has one card in hand (copper)
@@ -130,9 +127,6 @@ int main()
 	tributeLogic(&postG, player1, player2);
 
     universalTest(&preG, &postG, cardsDiscarded, cardsGained, buysGained, coinsGained, actionsGained, player1);
-    /*ASSERT(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
-    ASSERT(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
-    ASSERT(preG.coins + coinsGained == postG.coins);*/
 
     ASSERT(preG.handCount[player2] - 1 == postG.handCount[player2]);
 
@@ -162,10 +156,6 @@ int main()
 	tributeLogic(&postG, player1, player2);
 
     universalTest(&preG, &postG, cardsDiscarded, cardsGained, buysGained, coinsGained, actionsGained, player1);
-    /*ASSERT(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
-    ASSERT(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
-    ASSERT(preG.coins + coinsGained == postG.coins);
-    ASSERT(preG.numActions + actionsGained == postG.numActions);*/
 
     ASSERT(preG.deckCount[player2] - 1 == postG.deckCount[player2]);
 
@@ -193,6 +183,7 @@ int main()
 	preG.hand[player2][2] = copper;
 	preG.hand[player2][3] = tribute;
 	preG.hand[player2][4] = copper;*/
+    //change this?
 
     preG.deckCount[player2] = 5;
     preG.discardCount[player2] = 0;
@@ -237,10 +228,6 @@ int main()
 	tributeLogic(&postG, player1, player2);
 
     universalTest(&preG, &postG, cardsDiscarded, cardsGained, buysGained, coinsGained, actionsGained, player1);
-    /*ASSERT(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
-    ASSERT(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
-    ASSERT(preG.coins + coinsGained == postG.coins);
-    ASSERT(preG.numActions + actionsGained == postG.numActions);*/
 
     ASSERT(preG.handCount[player2] - 2 == postG.handCount[player2]);
 

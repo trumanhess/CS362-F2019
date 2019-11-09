@@ -60,7 +60,6 @@ int main()
     test 1: first option, gain +2 coins
     expect to gain +2 coins
 */
-    //coinsGained = 2;
     printf("\n\nTest 1:\n");
 
     preG.hand[player1][0] = minion;
@@ -84,12 +83,8 @@ int main()
     coinsGained = 2;
     actionsGained = 1;
     cardsGained = 0;
-	//cardEffect(minion, choice1, choice2, choice3, &postG, handpos, &bonus);
     minionLogic(choice1, choice2, &postG, handpos, player1);
 
-    /*ASSERT(preG.handCount[player1] + cardsGained - cardsDiscarded == postG.handCount[player1]);
-    ASSERT(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
-    ASSERT(preG.coins + coinsGained == postG.coins);*/
     universalTest(&preG, &postG, cardsDiscarded, cardsGained, buysGained, coinsGained, actionsGained, player1);
     ASSERT(preG.discardCount[player1] == postG.discardCount[player1]);
 
@@ -101,9 +96,6 @@ int main()
     player 2 will have 4 cards and should not gain a new set
     expect for player 1 to have a new hand and player 2 to keep hand
 */
-    /*cardsGained = 4;
-    cardsDiscarded = 5;
-    coinsGained = 0;*/
 
     printf("\n\nTest 2:\n");
 
@@ -127,24 +119,16 @@ int main()
     cardsGained = 4;
 	minionLogic(choice1, choice2, &postG, handpos, player1);
 
-    /*ASSERT(preG.handCount[player1] + cardsGained == postG.handCount[player1]);
-    ASSERT(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
-    ASSERT(preG.coins + coinsGained == postG.coins);*/
     universalTest(&preG, &postG, cardsDiscarded, cardsGained, buysGained, coinsGained, actionsGained, player1);
 
     ASSERT(preG.handCount[player2] + 0 - 0 == postG.handCount[player2]);
     ASSERT(preG.deckCount[player2] - 0 == postG.deckCount[player2]);
-
-    //need to check how discard pile was affected?
 
 /*
     test 3: second option, have 3 cards and check new set of cards (?)
     player 2 will have 5 cards and should gain a new set
     expect player one to gain a new hand and player 2 to gain a new hand
 */
-    /*cardsGained = 4;
-    cardsDiscarded = 3;
-    coinsGained = 0;*/
 
     printf("\n\nTest 3:\n");
 
@@ -169,15 +153,10 @@ int main()
     cardsGained = 4;
 	minionLogic(choice1, choice2, &postG, handpos, player1);
 
-    /*ASSERT(preG.handCount[player1] + cardsGained == postG.handCount[player1]);
-    ASSERT(preG.deckCount[player1] - cardsGained == postG.deckCount[player1]);
-    ASSERT(preG.coins + coinsGained == postG.coins);*/
     universalTest(&preG, &postG, cardsDiscarded, cardsGained, buysGained, coinsGained, actionsGained, player1);
 
     ASSERT(preG.handCount[player2] + 4 == postG.handCount[player2]);
     ASSERT(preG.deckCount[player2] - 4 == postG.deckCount[player2]);
-
-    //check discard piles for change
 
     printf("\n\n--------------------------------End Testing Minion---------------------------------\n\n");
 

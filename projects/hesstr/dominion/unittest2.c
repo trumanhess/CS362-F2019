@@ -55,10 +55,7 @@ int main()
 /* test 1: lose a copper, gain a silver */
 
     printf("\n\nTest 1:\n");
-    //cardsGained = 1;
-    //cardsDiscarded = 1;
-    //coinsGained = 3;//(?)
-    //set players hand
+
     preG.hand[thisPlayer][0] = steward;
 	preG.hand[thisPlayer][1] = copper;
 	preG.hand[thisPlayer][2] = duchy;
@@ -75,11 +72,7 @@ int main()
     actionsGained = 0;
     cardsGained = 1;
 	mineLogic(choice1, choice2, &postG, handpos, thisPlayer);
-    //updateCoins(thisPlayer, &postG, 4); //need to update coins to be accurate
 
-    /*ASSERT(preG.handCount[thisPlayer] + cardsGained - cardsDiscarded == postG.handCount[thisPlayer]);
-    //ASSERT(preG.deckCount[thisPlayer] - cardsGained == postG.deckCount[thisPlayer]);
-    ASSERT(preG.coins + coinsGained == postG.coins);*/
     universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
 
 /* 
@@ -89,10 +82,6 @@ int main()
 
     printf("\n\nTest 2:\n");
 
-    //cardsGained = 0;
-    //cardsDiscarded = 0;
-    //coinsGained = 0;
-    //set players hand
     preG.hand[thisPlayer][0] = steward;
 	preG.hand[thisPlayer][1] = silver;
 	preG.hand[thisPlayer][2] = duchy;
@@ -110,13 +99,8 @@ int main()
     actionsGained = 0;
     cardsGained = 0;
 	mineLogic(choice1, choice2, &postG, handpos, thisPlayer);
-    //updateCoins(thisPlayer, &postG, 4);
 
     universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
-    /*ASSERT(preG.handCount[thisPlayer] + cardsGained  == postG.handCount[thisPlayer]);
-    ASSERT(preG.deckCount[thisPlayer] - cardsGained == postG.deckCount[thisPlayer]);
-    ASSERT(preG.coins + coinsGained == postG.coins);*/
-
 
 /* 
     test 3: lose a copper, try to gain a gold 
@@ -124,9 +108,6 @@ int main()
 */
     printf("\n\nTest 3:\n");
 
-    //cardsGained = 0;
-    //cardsDiscarded = 0;
-    //coinsGained = 0;
     //set players hand
     preG.hand[thisPlayer][0] = steward;
 	preG.hand[thisPlayer][1] = copper;
@@ -144,12 +125,8 @@ int main()
     actionsGained = 0;
     cardsGained = 0;
 	mineLogic(choice1, choice2, &postG, handpos, thisPlayer);
-    //updateCoins(thisPlayer, &postG, 4);
 
     universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
-    /*ASSERT(preG.handCount[thisPlayer] + cardsGained  == postG.handCount[thisPlayer]);
-    ASSERT(preG.deckCount[thisPlayer] - cardsGained == postG.deckCount[thisPlayer]);
-    ASSERT(preG.coins + coinsGained == postG.coins);*/
 
 /* 
     test 4: lose a copper, try to gain a mine
@@ -157,6 +134,7 @@ int main()
 */
 
     printf("\n\nTest 4:\n");
+
     //set players hand
     preG.hand[thisPlayer][0] = steward;
 	preG.hand[thisPlayer][1] = copper;
@@ -174,13 +152,8 @@ int main()
     actionsGained = 0;
     cardsGained = 0;
 	mineLogic(choice1, choice2, &postG, handpos, thisPlayer);
-    //updateCoins(thisPlayer, &postG, 4);
 
     universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
-    /*
-    ASSERT(preG.handCount[thisPlayer] + cardsGained  == postG.handCount[thisPlayer]);
-    ASSERT(preG.deckCount[thisPlayer] - cardsGained == postG.deckCount[thisPlayer]);
-    ASSERT(preG.coins + coinsGained == postG.coins);*/
 
 /* 
     test 5: lose a estate, try to gain a mine
@@ -188,6 +161,7 @@ int main()
 */
 
     printf("\n\nTest 5:\n");
+
     //set players hand
     preG.hand[thisPlayer][0] = steward;
 	preG.hand[thisPlayer][1] = copper;
@@ -219,7 +193,8 @@ int main()
     }
 
 /*
-    test 6:
+    test 6: lose a silver, try to gain a gold
+    expect: to gain +2 coins
 */
     printf("\n\nTest 6:\n");
     preG.hand[thisPlayer][0] = steward;
@@ -238,7 +213,6 @@ int main()
     actionsGained = 0;
     cardsGained = 1;
 	mineLogic(choice1, choice2, &postG, handpos, thisPlayer);
-    //updateCoins(thisPlayer, &postG, 4); //need to update coins to be accurate
 
     universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
 
