@@ -17,38 +17,38 @@
         -:   12:            player 2 will have 4 cards and should not gain a new set
         -:   13:    test 3: second option, have 3 cards and check new set of cards (?)
         -:   14:            player 2 will have 5 cards and should gain a new set
-        -:   15:    more tests?
-        -:   16:*/
-        -:   17:
-        3:   18:int universalTest(struct gameState *pre, struct gameState *post, int discarded, int cardsGained, int buysGained, int coinsGained, int actionsGained, int player)
-        -:   19:{
-        3:   20:    printf("Number buys:\n");
-        3:   21:    ASSERT((pre->numBuys + buysGained) == post->numBuys);
-        3:   22:    printf("\texpected = %d, actual = %d\n", pre->numBuys + buysGained, post->numBuys);
-        -:   23:
-        3:   24:    printf("Number Actions:\n");
-        3:   25:    ASSERT(post->numActions == pre->numActions + actionsGained);
-        3:   26:    printf("\texpected = %d, actual = %d\n", pre->numActions + actionsGained, post->numActions);
-        -:   27:
-        3:   28:    printf("Number coins:\n");
-        3:   29:    ASSERT((pre->coins + coinsGained) == post->coins);
-        3:   30:    printf("\texpected = %d, actual = %d\n", pre->coins + coinsGained, post->coins);
-        -:   31:
-        3:   32:    printf("Hand count:\n");
-        3:   33:    ASSERT(post->handCount[player] == pre->handCount[player] - discarded + cardsGained);
-        3:   34:    printf("\texpected = %d, actual = %d\n", pre->handCount[player] - discarded + cardsGained, post->handCount[player]);
-        3:   35:}
-        -:   36:
-        1:   37:int main()
-        -:   38:{
-        1:   39:    int cardsGained = 0;
-        1:   40:    int cardsDiscarded = 0;
-        1:   41:    int coinsGained = 0;
-        1:   42:    int buysGained = 0;
-        1:   43:    int actionsGained = 0;
-        -:   44:
+        -:   15:*/
+        -:   16:
+        3:   17:int universalTest(struct gameState *pre, struct gameState *post, int discarded, int cardsGained, int buysGained, int coinsGained, int actionsGained, int player)
+        -:   18:{
+        3:   19:    printf("Number buys:\n");
+        3:   20:    ASSERT((pre->numBuys + buysGained) == post->numBuys);
+        3:   21:    printf("\texpected = %d, actual = %d\n", pre->numBuys + buysGained, post->numBuys);
+        -:   22:
+        3:   23:    printf("Number Actions:\n");
+        3:   24:    ASSERT(post->numActions == pre->numActions + actionsGained);
+        3:   25:    printf("\texpected = %d, actual = %d\n", pre->numActions + actionsGained, post->numActions);
+        -:   26:
+        3:   27:    printf("Number coins:\n");
+        3:   28:    ASSERT((pre->coins + coinsGained) == post->coins);
+        3:   29:    printf("\texpected = %d, actual = %d\n", pre->coins + coinsGained, post->coins);
+        -:   30:
+        3:   31:    printf("Hand count:\n");
+        3:   32:    ASSERT(post->handCount[player] == pre->handCount[player] - discarded + cardsGained);
+        3:   33:    printf("\texpected = %d, actual = %d\n", pre->handCount[player] - discarded + cardsGained, post->handCount[player]);
+        -:   34:
+        3:   35:    return 0;
+        -:   36:}
+        -:   37:
+        1:   38:int main()
+        -:   39:{
+        1:   40:    int cardsGained = 0;
+        1:   41:    int cardsDiscarded = 0;
+        1:   42:    int coinsGained = 0;
+        1:   43:    int buysGained = 0;
+        1:   44:    int actionsGained = 0;
         -:   45:
-        1:   46:    int handpos = 0, choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0;
+        1:   46:    int handpos = 0, choice1 = 0, choice2 = 0;
         1:   47:    int seed = 1000;
         1:   48:    int numPlayers = 2;
         1:   49:    int player1 = 0;
@@ -57,113 +57,112 @@
         1:   52:	int k[10] = {adventurer, silver, copper, gold, mine, minion,
         -:   53:			sea_hag, baron, smithy, council_room};
         -:   54:
-        -:   55://REPLACE ALL //assertS WITH OWN IMPLEMENTATION
-        1:   56:    printf("\n\n-----------------------------Testing Minion------------------------\n\n");
-        1:   57:    initializeGame(numPlayers, k, seed, &preG);
-        -:   58:
-        -:   59:/*
-        -:   60:    test 1: first option, gain +2 coins
-        -:   61:    expect to gain +2 coins
-        -:   62:*/
-        1:   63:    printf("\n\nTest 1:\n");
-        -:   64:
-        1:   65:    preG.hand[player1][0] = minion;
-        1:   66:	preG.hand[player1][1] = steward;
-        1:   67:	preG.hand[player1][2] = duchy;
-        1:   68:	preG.hand[player1][3] = estate;
-        1:   69:	preG.hand[player1][4] = mine;
-        -:   70:
-        1:   71:    preG.hand[player2][0] = minion;
-        1:   72:	preG.hand[player2][1] = copper;
-        1:   73:	preG.hand[player2][2] = duchy;
-        1:   74:	preG.hand[player2][3] = estate;
-        1:   75:	preG.hand[player2][4] = mine;
-        1:   76:    preG.handCount[player2] = 5;
-        -:   77:
-        1:   78:    memcpy(&postG, &preG, sizeof(struct gameState));
-        1:   79:    choice1 = 1; //choose to gain +2 coins
-        1:   80:    choice2 = 0;
-        1:   81:    cardsDiscarded = 0;
-        1:   82:    buysGained = 0;
-        1:   83:    coinsGained = 2;
-        1:   84:    actionsGained = 1;
-        1:   85:    cardsGained = 0;
-        1:   86:    minionLogic(choice1, choice2, &postG, handpos, player1);
-        -:   87:
-        1:   88:    universalTest(&preG, &postG, cardsDiscarded, cardsGained, buysGained, coinsGained, actionsGained, player1);
-        1:   89:    ASSERT(preG.discardCount[player1] == postG.discardCount[player1]);
-        -:   90:
-        1:   91:    ASSERT(preG.handCount[player2] + 0 - 0 == postG.handCount[player2]);
-        1:   92:    ASSERT(preG.deckCount[player2] - 0 == postG.deckCount[player2]);
-        -:   93:
-        -:   94:/*
-        -:   95:    test 2: second option, have 5 cards and check new set of cards (?)
-        -:   96:    player 2 will have 4 cards and should not gain a new set
-        -:   97:    expect for player 1 to have a new hand and player 2 to keep hand
-        -:   98:*/
-        -:   99:
-        1:  100:    printf("\n\nTest 2:\n");
-        -:  101:
-        1:  102:    preG.hand[player1][0] = minion;
-        1:  103:	preG.hand[player1][1] = copper;
-        1:  104:	preG.hand[player1][2] = duchy;
-        1:  105:	preG.hand[player1][3] = estate;
-        1:  106:	preG.hand[player1][4] = mine;
-        -:  107:
-        1:  108:    preG.hand[player2][0] = minion;
-        1:  109:	preG.hand[player2][1] = copper;
-        1:  110:	preG.hand[player2][2] = duchy;
-        1:  111:	preG.hand[player2][3] = estate;
-        -:  112:
-        1:  113:    memcpy(&postG, &preG, sizeof(struct gameState));
-        1:  114:    choice1 = 2;
-        1:  115:    cardsDiscarded = 5;
-        1:  116:    buysGained = 0;
-        1:  117:    coinsGained = 0;
-        1:  118:    actionsGained = 1;
-        1:  119:    cardsGained = 4;
-        1:  120:	minionLogic(choice1, choice2, &postG, handpos, player1);
-        -:  121:
-        1:  122:    universalTest(&preG, &postG, cardsDiscarded, cardsGained, buysGained, coinsGained, actionsGained, player1);
-        -:  123:
-        1:  124:    ASSERT(preG.handCount[player2] + 0 - 0 == postG.handCount[player2]);
-        1:  125:    ASSERT(preG.deckCount[player2] - 0 == postG.deckCount[player2]);
-        -:  126:
-        -:  127:/*
-        -:  128:    test 3: second option, have 3 cards and check new set of cards (?)
-        -:  129:    player 2 will have 5 cards and should gain a new set
-        -:  130:    expect player one to gain a new hand and player 2 to gain a new hand
-        -:  131:*/
-        -:  132:
-        1:  133:    printf("\n\nTest 3:\n");
+        1:   55:    printf("\n\n-----------------------------Testing Minion------------------------\n\n");
+        1:   56:    initializeGame(numPlayers, k, seed, &preG);
+        -:   57:
+        -:   58:/*
+        -:   59:    test 1: first option, gain +2 coins
+        -:   60:    expect to gain +2 coins
+        -:   61:*/
+        1:   62:    printf("\n\nTest 1:\n");
+        -:   63:
+        1:   64:    preG.hand[player1][0] = minion;
+        1:   65:	preG.hand[player1][1] = steward;
+        1:   66:	preG.hand[player1][2] = duchy;
+        1:   67:	preG.hand[player1][3] = estate;
+        1:   68:	preG.hand[player1][4] = mine;
+        -:   69:
+        1:   70:    preG.hand[player2][0] = minion;
+        1:   71:	preG.hand[player2][1] = copper;
+        1:   72:	preG.hand[player2][2] = duchy;
+        1:   73:	preG.hand[player2][3] = estate;
+        1:   74:	preG.hand[player2][4] = mine;
+        1:   75:    preG.handCount[player2] = 5;
+        -:   76:
+        1:   77:    memcpy(&postG, &preG, sizeof(struct gameState));
+        1:   78:    choice1 = 1; //choose to gain +2 coins
+        1:   79:    choice2 = 0;
+        1:   80:    cardsDiscarded = 0;
+        1:   81:    buysGained = 0;
+        1:   82:    coinsGained = 2;
+        1:   83:    actionsGained = 1;
+        1:   84:    cardsGained = 0;
+        1:   85:    minionLogic(choice1, choice2, &postG, handpos, player1);
+        -:   86:
+        1:   87:    universalTest(&preG, &postG, cardsDiscarded, cardsGained, buysGained, coinsGained, actionsGained, player1);
+        1:   88:    ASSERT(preG.discardCount[player1] == postG.discardCount[player1]);
+        -:   89:
+        1:   90:    ASSERT(preG.handCount[player2] + 0 - 0 == postG.handCount[player2]);
+        1:   91:    ASSERT(preG.deckCount[player2] - 0 == postG.deckCount[player2]);
+        -:   92:
+        -:   93:/*
+        -:   94:    test 2: second option, have 5 cards and check new set of cards (?)
+        -:   95:    player 2 will have 4 cards and should not gain a new set
+        -:   96:    expect for player 1 to have a new hand and player 2 to keep hand
+        -:   97:*/
+        -:   98:
+        1:   99:    printf("\n\nTest 2:\n");
+        -:  100:
+        1:  101:    preG.hand[player1][0] = minion;
+        1:  102:	preG.hand[player1][1] = copper;
+        1:  103:	preG.hand[player1][2] = duchy;
+        1:  104:	preG.hand[player1][3] = estate;
+        1:  105:	preG.hand[player1][4] = mine;
+        -:  106:
+        1:  107:    preG.hand[player2][0] = minion;
+        1:  108:	preG.hand[player2][1] = copper;
+        1:  109:	preG.hand[player2][2] = duchy;
+        1:  110:	preG.hand[player2][3] = estate;
+        -:  111:
+        1:  112:    memcpy(&postG, &preG, sizeof(struct gameState));
+        1:  113:    choice1 = 2;
+        1:  114:    cardsDiscarded = 5;
+        1:  115:    buysGained = 0;
+        1:  116:    coinsGained = 0;
+        1:  117:    actionsGained = 1;
+        1:  118:    cardsGained = 4;
+        1:  119:	minionLogic(choice1, choice2, &postG, handpos, player1);
+        -:  120:
+        1:  121:    universalTest(&preG, &postG, cardsDiscarded, cardsGained, buysGained, coinsGained, actionsGained, player1);
+        -:  122:
+        1:  123:    ASSERT(preG.handCount[player2] + 0 - 0 == postG.handCount[player2]);
+        1:  124:    ASSERT(preG.deckCount[player2] - 0 == postG.deckCount[player2]);
+        -:  125:
+        -:  126:/*
+        -:  127:    test 3: second option, have 3 cards and check new set of cards (?)
+        -:  128:    player 2 will have 5 cards and should gain a new set
+        -:  129:    expect player one to gain a new hand and player 2 to gain a new hand
+        -:  130:*/
+        -:  131:
+        1:  132:    printf("\n\nTest 3:\n");
+        -:  133:
         -:  134:
-        -:  135:
-        1:  136:    preG.hand[player1][0] = minion;
-        1:  137:	preG.hand[player1][1] = copper;
-        1:  138:	preG.hand[player1][2] = duchy;
-        1:  139:    preG.handCount[player1] = 3;
-        -:  140:
-        1:  141:    preG.hand[player2][0] = minion;
-        1:  142:	preG.hand[player2][1] = copper;
-        1:  143:	preG.hand[player2][2] = duchy;
-        1:  144:	preG.hand[player2][3] = estate;
-        1:  145:    preG.hand[player2][4] = mine;
-        -:  146:
-        1:  147:    memcpy(&postG, &preG, sizeof(struct gameState));
-        1:  148:    choice1 = 2; //choose to gain a new hand
-        1:  149:    cardsDiscarded = 3;
-        1:  150:    buysGained = 0;
-        1:  151:    coinsGained = 0;
-        1:  152:    actionsGained = 1;
-        1:  153:    cardsGained = 4;
-        1:  154:	minionLogic(choice1, choice2, &postG, handpos, player1);
-        -:  155:
-        1:  156:    universalTest(&preG, &postG, cardsDiscarded, cardsGained, buysGained, coinsGained, actionsGained, player1);
-        -:  157:
-        1:  158:    ASSERT(preG.handCount[player2] + 4 == postG.handCount[player2]);
-        1:  159:    ASSERT(preG.deckCount[player2] - 4 == postG.deckCount[player2]);
-        -:  160:
-        1:  161:    printf("\n\n--------------------------------End Testing Minion---------------------------------\n\n");
-        -:  162:
-        1:  163:    return 0;
-        -:  164:}
+        1:  135:    preG.hand[player1][0] = minion;
+        1:  136:	preG.hand[player1][1] = copper;
+        1:  137:	preG.hand[player1][2] = duchy;
+        1:  138:    preG.handCount[player1] = 3;
+        -:  139:
+        1:  140:    preG.hand[player2][0] = minion;
+        1:  141:	preG.hand[player2][1] = copper;
+        1:  142:	preG.hand[player2][2] = duchy;
+        1:  143:	preG.hand[player2][3] = estate;
+        1:  144:    preG.hand[player2][4] = mine;
+        -:  145:
+        1:  146:    memcpy(&postG, &preG, sizeof(struct gameState));
+        1:  147:    choice1 = 2; //choose to gain a new hand
+        1:  148:    cardsDiscarded = 3;
+        1:  149:    buysGained = 0;
+        1:  150:    coinsGained = 0;
+        1:  151:    actionsGained = 1;
+        1:  152:    cardsGained = 4;
+        1:  153:	minionLogic(choice1, choice2, &postG, handpos, player1);
+        -:  154:
+        1:  155:    universalTest(&preG, &postG, cardsDiscarded, cardsGained, buysGained, coinsGained, actionsGained, player1);
+        -:  156:
+        1:  157:    ASSERT(preG.handCount[player2] + 4 == postG.handCount[player2]);
+        1:  158:    ASSERT(preG.deckCount[player2] - 4 == postG.deckCount[player2]);
+        -:  159:
+        1:  160:    printf("\n\n--------------------------------End Testing Minion---------------------------------\n\n");
+        -:  161:
+        1:  162:    return 0;
+        -:  163:}

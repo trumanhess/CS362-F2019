@@ -31,6 +31,8 @@ int universalTest(struct gameState *pre, struct gameState *post, int discarded, 
     printf("Hand count:\n");
     ASSERT(post->handCount[player] == pre->handCount[player] - discarded + cardsGained);
     printf("\texpected = %d, actual = %d\n", pre->handCount[player] - discarded + cardsGained, post->handCount[player]);
+
+    return 0;
 }
 
 int main()
@@ -41,7 +43,7 @@ int main()
     int buysGained = 0;
     int actionsGained = 0;
 
-    int handpos = 0, choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0;
+    int handpos = 0, choice1 = 0, choice2 = 0;
     int seed = 1000;
     int numPlayers = 2;
     int thisPlayer = 0;

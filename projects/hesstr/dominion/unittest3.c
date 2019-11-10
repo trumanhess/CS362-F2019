@@ -12,7 +12,6 @@
             player 2 will have 4 cards and should not gain a new set
     test 3: second option, have 3 cards and check new set of cards (?)
             player 2 will have 5 cards and should gain a new set
-    more tests?
 */
 
 int universalTest(struct gameState *pre, struct gameState *post, int discarded, int cardsGained, int buysGained, int coinsGained, int actionsGained, int player)
@@ -32,6 +31,8 @@ int universalTest(struct gameState *pre, struct gameState *post, int discarded, 
     printf("Hand count:\n");
     ASSERT(post->handCount[player] == pre->handCount[player] - discarded + cardsGained);
     printf("\texpected = %d, actual = %d\n", pre->handCount[player] - discarded + cardsGained, post->handCount[player]);
+
+    return 0;
 }
 
 int main()
@@ -42,8 +43,7 @@ int main()
     int buysGained = 0;
     int actionsGained = 0;
 
-
-    int handpos = 0, choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0;
+    int handpos = 0, choice1 = 0, choice2 = 0;
     int seed = 1000;
     int numPlayers = 2;
     int player1 = 0;
@@ -52,7 +52,6 @@ int main()
 	int k[10] = {adventurer, silver, copper, gold, mine, minion,
 			sea_hag, baron, smithy, council_room};
 
-//REPLACE ALL //assertS WITH OWN IMPLEMENTATION
     printf("\n\n-----------------------------Testing Minion------------------------\n\n");
     initializeGame(numPlayers, k, seed, &preG);
 
