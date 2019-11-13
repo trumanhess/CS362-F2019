@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "rngs.h"
-#include "custom_assert.h"
+//#include "custom_assert.h"
 
 
 /*
@@ -60,17 +60,30 @@ int main()
     printf("\n\n-------------Randomly Testing Baron---------\n\n");
     initializeGame(numPlayers, k, seed, &preG);
 
+    srand(time(NULL));
 
-    choice1 = rand() % preG.handCount[player1];
+    int count = 0;
 
-    //might randomize player hand count so it is bigger or smaller?
-    for(int i = 0; i < preG.handCount[player1]; i++) //use non-randomized player hand size to randomize the players hand
+    while(count <= 1000)
     {
-        preG.hand[player1][i] = rand() % 24; //or is it 23?
+        choice1 = rand() % preG.handCount[player1]; //choose a random card from the handcount of player1
+
+        //might randomize player hand count so it is bigger or smaller?
+
+        for(int i = 0; i < preG.handCount[player1]; i++) //use non-randomized player hand size to randomize the players hand
+        {
+            preG.hand[player1][i] = rand() % 27; //or is it 23? 0 to 26
+        }
+
+        //randomize supply count for estates
+        preG.supplyCount[estate] = rand() % 12 + (-1); //generate random numbers between -1 and 10(?)
+
+        memcpy(&postG, &preG, sizeof(struct gameState));
+
+        baronLogic(choice1, &postG, player1);
+
+        count++;
     }
-
-    //randomize supply count for estates
-
 
     return 0;
 }
