@@ -28,6 +28,7 @@ randomtestresults: randomtestcard1.c randomtestcard2.c randomtestcard3.c
 	gcov -f randomtestcard3.c >> randomtestresults.out
 	gcov -fb dominion.c >> randomtestresults.out
 	cat dominion.c.gcov >> randomtestresults.out
+	cat randomtestcard1.c.gcov >> randomtestresults.out
 
 
 player: player.c interface.o

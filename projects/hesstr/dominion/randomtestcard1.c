@@ -3,43 +3,28 @@
 #include <string.h>
 #include <stdio.h>
 #include "rngs.h"
-//#include "custom_assert.h"
-
-
-/*
-vars to consider for randomization:
-    YES:
-        player1 state vars
-        randomize card locations and which cards are being used in the players hand
-        supply deck numbers
-        the number which the player inputs for getting rid of and estate
-
-    NO:
-        number players
-
-*/
-
-
-/*
-
-struct gameState {
-    int numPlayers; //number of players
-    int supplyCount[treasure_map+1];  //this is the amount of a specific type of card given a specific number.
-    int embargoTokens[treasure_map+1];
-    int outpostPlayed;
-    int outpostTurn;
-    int whoseTurn;
-    int phase;
-    int numActions; /* Starts at 1 each turn
-    int coins; /* Use as you see fit!
-    int numBuys; /* Starts at 1 each turn
-    int hand[MAX_PLAYERS][MAX_HAND];
-    int handCount[MAX_PLAYERS];
-};
-
-*/
 
 #define MAX_HAND_COUNT 10
+
+int printError(struct gameState *pre, struct gameState *post, int coinsGained, int discarded, int cardsGained, int buysGained, int player, int testNum)
+{
+    if((pre->numBuys + buysGained) != post->numBuys || post->handCount[player] != pre->handCount[player] - discarded + cardsGained || (pre->coins + coinsGained) != post->coins)
+    {
+        //print out player state, expected and actual as well as test number
+        printf("\nTest Number: %d\n", testNum);
+
+        printf("\tNumber of Buys:\n");
+        printf("\t\tExpected: %d, Actual: %d\n", pre->numBuys + buysGained, post->numBuys);
+
+        printf("\tNumber coins:\n");
+        printf("\t\tExpected = %d, Actual = %d\n", pre->coins + coinsGained, post->coins);
+
+        printf("\tHand count:\n");
+        printf("\t\tExpected = %d, Actual = %d\n", pre->handCount[player] - discarded + cardsGained, post->handCount[player]);
+    }
+
+    return 0;
+}
 
 int main()
 {
@@ -47,9 +32,8 @@ int main()
     int discarded = 0;
     int coinsGained = 0;
     int buysGained = 0;
-    int actionsGained = 0;
 
-    int choice1 = 0; //randomize player1 choice1
+    int choice1 = 0;
     int seed = 1000;
     int numPlayers = 2;
     int player1 = 0;
@@ -66,24 +50,42 @@ int main()
 
     while(count <= 1000)
     {
-        choice1 = rand() % preG.handCount[player1]; //choose a random card from the handcount of player1
+        coinsGained = 0;
+        buysGained = 0;
+        discarded = 0;
+        cardsGained = 0;
 
-        //might randomize player hand count so it is bigger or smaller?
+        choice1 = rand() % 2; //choose to either get rid of an estate or not
 
         for(int i = 0; i < preG.handCount[player1]; i++) //use non-randomized player hand size to randomize the players hand
         {
-            preG.hand[player1][i] = rand() % 27; //or is it 23? 0 to 26
+            preG.hand[player1][i] = rand() % 27; //0 to 26
         }
 
         //randomize supply count for estates
-        preG.supplyCount[estate] = rand() % 12 + (-1); //generate random numbers between -1 and 10(?)
+        preG.supplyCount[estate] = rand() % 12 + (-5); //generate random numbers between -5 and 6
 
+        buysGained = 1;
+        if(choice1 == 1)
+        {
+            coinsGained = 4;
+            discarded = 1;
+        }
+        else
+        {
+            cardsGained = 1;
+        }
+        
         memcpy(&postG, &preG, sizeof(struct gameState));
 
         baronLogic(choice1, &postG, player1);
+
+        printError(&preG, &postG, coinsGained, discarded, cardsGained, buysGained, player1, count);
 
         count++;
     }
 
     return 0;
 }
+
+//how do we want to catch errors in a random tester?

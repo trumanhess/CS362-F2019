@@ -8,99 +8,114 @@
         -:    3:#include <string.h>
         -:    4:#include <stdio.h>
         -:    5:#include "rngs.h"
-        -:    6://#include "custom_assert.h"
-        -:    7:
+        -:    6:
+        -:    7:#define MAX_HAND_COUNT 10
         -:    8:
-        -:    9:/*
-        -:   10:vars to consider for randomization:
-        -:   11:    YES:
-        -:   12:        player1 state vars
-        -:   13:        randomize card locations and which cards are being used in the players hand
-        -:   14:        supply deck numbers
-        -:   15:        the number which the player inputs for getting rid of and estate
+     2002:    9:int printError(struct gameState *pre, struct gameState *post, int coinsGained, int discarded, 
+        -:   10:    int cardsGained, int actionsGained, int player)
+        -:   11:{
+     2002:   12:    if((pre->numActions + actionsGained) != post->numActions || post->handCount[player] != pre->handCount[player] - discarded + cardsGained || (pre->coins + coinsGained) != post->coins)
+        -:   13:    {   
+     1661:   14:        printf("\t\tNumber of Actions:\n");
+     1661:   15:        printf("\t\t\tExpected: %d, Actual: %d\n", pre->numActions + actionsGained, post->numActions);
         -:   16:
-        -:   17:    NO:
-        -:   18:        number players
+     1661:   17:        printf("\t\tNumber coins:\n");
+     1661:   18:        printf("\t\t\tExpected = %d, Actual = %d\n", pre->coins + coinsGained, post->coins);
         -:   19:
-        -:   20:*/
-        -:   21:
-        -:   22:
-        -:   23:/*
-        -:   24:
-        -:   25:struct gameState {
-        -:   26:    int numPlayers; //number of players
-        -:   27:    int supplyCount[treasure_map+1];  //this is the amount of a specific type of card given a specific number.
-        -:   28:    int embargoTokens[treasure_map+1];
-        -:   29:    int outpostPlayed;
-        -:   30:    int outpostTurn;
-        -:   31:    int whoseTurn;
-        -:   32:    int phase;
-        -:   33:    int numActions; /* Starts at 1 each turn
-        -:   34:    int coins; /* Use as you see fit!
-        -:   35:    int numBuys; /* Starts at 1 each turn
-        -:   36:    int hand[MAX_PLAYERS][MAX_HAND];
-        -:   37:    int handCount[MAX_PLAYERS];
-        -:   38:};
-        -:   39:
-        -:   40:*/
-        -:   41:
-        -:   42:#define MAX_HAND_COUNT 10
+     1661:   20:        printf("\t\tHand count:\n");
+     1661:   21:        printf("\t\t\tExpected = %d, Actual = %d\n", pre->handCount[player] - discarded + cardsGained, post->handCount[player]);
+        -:   22:    }
+        -:   23:
+     2002:   24:    return 0;
+        -:   25:}
+        -:   26:
+        1:   27:int main()
+        -:   28:{
+        1:   29:    int cardsGainedP1 = 0;
+        1:   30:    int discardedP1 = 0;
+        1:   31:    int cardsGainedP2 = 0;
+        1:   32:    int discardedP2 = 0;
+        1:   33:    int coinsGained = 0;
+        1:   34:    int actionsGained = 0;
+        -:   35:
+        1:   36:    int choice1 = 0, choice2 = 0, handPos = 0;
+        1:   37:    int seed = 1000;
+        1:   38:    int numPlayers = 2;
+        1:   39:    int player1 = 0, player2 = 1;
+        -:   40:	struct gameState preG, postG;
+        1:   41:	int k[10] = {adventurer, embargo, village, minion, mine, cutpurse,
+        -:   42:			sea_hag, baron, smithy, council_room};
         -:   43:
-        1:   44:int main()
-        -:   45:{
-        1:   46:    int cardsGained = 0;
-        1:   47:    int discarded = 0;
-        1:   48:    int coinsGained = 0;
-        1:   49:    int buysGained = 0;
-        1:   50:    int actionsGained = 0;
-        -:   51:
-        1:   52:    int choice1 = 0, choice2 = 0, handPos = 0; //randomize player1 choice1
-        1:   53:    int seed = 1000;
-        1:   54:    int numPlayers = 2;
-        1:   55:    int player1 = 0, player2 = 1;
-        -:   56:	struct gameState preG, postG;
-        1:   57:	int k[10] = {adventurer, embargo, village, minion, mine, cutpurse,
-        -:   58:			sea_hag, baron, smithy, council_room};
+        1:   44:    printf("\n\n-------------Randomly Testing Mininon---------\n\n");
+        1:   45:    initializeGame(numPlayers, k, seed, &preG);
+        -:   46:
+        1:   47:    srand(time(NULL));
+        -:   48:
+        1:   49:    int count = 0;
+        -:   50:
+     1003:   51:    while(count <= 1000)
+        -:   52:    {
+     1001:   53:        actionsGained = 0;
+     1001:   54:        cardsGainedP1 = 0;
+     1001:   55:        discardedP1 = 0;
+     1001:   56:        cardsGainedP2 = 0;
+     1001:   57:        discardedP2 = 0;
+     1001:   58:        coinsGained = 0;
         -:   59:
-        1:   60:    printf("\n\n-------------Randomly Testing Mininon---------\n\n");
-        1:   61:    initializeGame(numPlayers, k, seed, &preG);
-        -:   62:
-        1:   63:    srand(time(NULL));
+     1001:   60:        choice1 = rand() % (2 - 1 + (1)) + 1; //either 1 or 2
+        -:   61:        
+     1001:   62:        preG.handCount[player1] = rand() % 6 + (1); //between 1 and 6
+     1001:   63:        preG.handCount[player2] = rand() % 6 + (1); //between 1 and 6
         -:   64:
-        1:   65:    int count = 0;
-        -:   66:
-     1003:   67:    while(count <= 1000)
-        -:   68:    {
-     1001:   69:        choice1 = rand() % (2 - 1 + (1)) + 1; //either 1 or 2
-        -:   70:        //choice1 = 1;
-        -:   71:        
-     1001:   72:        preG.handCount[player1] = rand() % 6 + (1); //between 0 and 5
-     1001:   73:        preG.handCount[player2] = rand() % 6 + (1); //between 0 and 5
+     4539:   65:        for(int i = 0; i < preG.handCount[player1]; i++) //use player hand size to randomize player1s hand
+        -:   66:        {
+     3538:   67:            preG.hand[player1][i] = rand() % 27; //how many cards there are in dominion.h
+        -:   68:        }
+        -:   69:
+     4520:   70:        for(int i = 0; i < preG.handCount[player2]; i++) //use player hand size to randomize player2s hand
+        -:   71:        {
+     3519:   72:            preG.hand[player2][i] = rand() % 27; //how many cards there are in dominion.h
+        -:   73:        }
         -:   74:
-     4475:   75:        for(int i = 0; i < preG.handCount[player1]; i++) //use non-randomized player hand size to randomize player1s hand
+     4539:   75:        for(int i = 0; i < preG.handCount[player1]; i++)
         -:   76:        {
-     3474:   77:            preG.hand[player1][i] = rand() % 27; //or is it 23? 0 to 26
-        -:   78:        }
-        -:   79:
-     4455:   80:        for(int i = 0; i < preG.handCount[player2]; i++) //use non-randomized player hand size to randomize player2s hand
-        -:   81:        {
-     3454:   82:            preG.hand[player2][i] = rand() % 27; //or is it 23? 0 to 26
-        -:   83:        }
+     3538:   77:            if(preG.hand[player1][i] == minion)
+        -:   78:            {
+      126:   79:                handPos = i;
+        -:   80:            }
+        -:   81:        }
+        -:   82:
+     1001:   83:        actionsGained = 1;
         -:   84:
-     4475:   85:        for(int i = 0; i < preG.handCount[player1]; i++)
+     1001:   85:        if(choice1 == 1)
         -:   86:        {
-     3474:   87:            if(preG.hand[player1][i] == minion)
-        -:   88:            {
-      139:   89:                handPos = i;
-        -:   90:            }
-        -:   91:        }
-        -:   92:
-     1001:   93:        memcpy(&postG, &preG, sizeof(struct gameState));
-        -:   94:
-     1001:   95:        minionLogic(choice1, choice2, &postG, handPos, player1);
-        -:   96:
-     1001:   97:        count++;
-        -:   98:    }
-        -:   99:
-        1:  100:    return 0;
-        -:  101:}
+      494:   87:            coinsGained = 2;
+        -:   88:        }
+        -:   89:        else
+        -:   90:        {
+      507:   91:            discardedP1 = preG.handCount[player1];
+      507:   92:            discardedP2 = preG.handCount[player2];
+        -:   93:
+      507:   94:            cardsGainedP1 = 4;
+      507:   95:            if(preG.handCount[player2] >= 5)
+        -:   96:            {
+      197:   97:                cardsGainedP2 = 4;
+        -:   98:            }
+        -:   99:        }
+        -:  100:        
+        -:  101:
+     1001:  102:        memcpy(&postG, &preG, sizeof(struct gameState));
+        -:  103:
+     1001:  104:        minionLogic(choice1, choice2, &postG, handPos, player1);
+        -:  105:
+     1001:  106:        printf("\nTest Number: %d\n", count);
+     1001:  107:        printf("\tPlayer 1:\n");
+     1001:  108:        printError(&preG, &postG, coinsGained, discardedP1, cardsGainedP1, actionsGained, player1);
+     1001:  109:        printf("\tPlayer 2:\n");
+     1001:  110:        printError(&preG, &postG, 0, discardedP2, cardsGainedP2, actionsGained, player2);
+        -:  111:
+     1001:  112:        count++;
+        -:  113:    }
+        -:  114:
+        1:  115:    return 0;
+        -:  116:}
