@@ -16,16 +16,16 @@
      1001:   11:    if((pre->numBuys + buysGained) != post->numBuys || post->handCount[player] != pre->handCount[player] - discarded + cardsGained || (pre->coins + coinsGained) != post->coins)
         -:   12:    {
         -:   13:        //print out player state, expected and actual as well as test number
-      983:   14:        printf("\nTest Number: %d\n", testNum);
+      979:   14:        printf("\nTest Number: %d\n", testNum);
         -:   15:
-      983:   16:        printf("\tNumber of Buys:\n");
-      983:   17:        printf("\t\tExpected: %d, Actual: %d\n", pre->numBuys + buysGained, post->numBuys);
+      979:   16:        printf("\tNumber of Buys:\n");
+      979:   17:        printf("\t\tExpected: %d, Actual: %d\n", pre->numBuys + buysGained, post->numBuys);
         -:   18:
-      983:   19:        printf("\tNumber coins:\n");
-      983:   20:        printf("\t\tExpected = %d, Actual = %d\n", pre->coins + coinsGained, post->coins);
+      979:   19:        printf("\tNumber coins:\n");
+      979:   20:        printf("\t\tExpected = %d, Actual = %d\n", pre->coins + coinsGained, post->coins);
         -:   21:
-      983:   22:        printf("\tHand count:\n");
-      983:   23:        printf("\t\tExpected = %d, Actual = %d\n", pre->handCount[player] - discarded + cardsGained, post->handCount[player]);
+      979:   22:        printf("\tHand count:\n");
+      979:   23:        printf("\t\tExpected = %d, Actual = %d\n", pre->handCount[player] - discarded + cardsGained, post->handCount[player]);
         -:   24:    }
         -:   25:
      1001:   26:    return 0;
@@ -73,12 +73,12 @@
      1001:   68:        buysGained = 1;
      1001:   69:        if(choice1 == 1)
         -:   70:        {
-      508:   71:            coinsGained = 4;
-      508:   72:            discarded = 1;
+      481:   71:            coinsGained = 4;
+      481:   72:            discarded = 1;
         -:   73:        }
         -:   74:        else
         -:   75:        {
-      493:   76:            cardsGained = 1;
+      520:   76:            cardsGained = 1;
         -:   77:        }
         -:   78:        
      1001:   79:        memcpy(&postG, &preG, sizeof(struct gameState));

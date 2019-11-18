@@ -89,12 +89,12 @@ int main()
         else
         {
             discardedP1 = preG.handCount[player1];
-            discardedP2 = preG.handCount[player2];
-
             cardsGainedP1 = 4;
+            
             if(preG.handCount[player2] >= 5)
             {
                 cardsGainedP2 = 4;
+                discardedP2 = preG.handCount[player2];
             }
         }
         

@@ -87,9 +87,22 @@ int main()
         }
         else
         {
-            tribReveal[0] = preG.deck[player2][preG.deckCount[player2]-1];
-            tribReveal[1] = preG.deck[player2][preG.deckCount[player2]-2];
-            deckDiscard = 2;
+            if(preG.deckCount[player2] == 0)
+            {
+                tribReveal[0] = preG.discard[player2][preG.discardCount[player2]-1];
+                tribReveal[1] = preG.discard[player2][preG.discardCount[player2]-2];
+            }
+            else
+            {            
+                tribReveal[0] = preG.deck[player2][preG.deckCount[player2]-1];
+                tribReveal[1] = preG.deck[player2][preG.deckCount[player2]-2];
+                deckDiscard = 2;
+            }
+        }
+
+        if(tribReveal[0] == tribReveal[1])
+        {
+            tribReveal[1] = -1;
         }
                 
         for(int i = 0; i < 2; i++)
@@ -102,7 +115,7 @@ int main()
             {
                 cardsGainedP1 += 2;
             }
-            else if(tribReveal[i] <= 0 && tribReveal[i] >= 26)
+            else if(tribReveal[i] != -1)
             {
                 actionsGained += 2;
             }

@@ -20,16 +20,15 @@ randomtestresults: randomtestcard1.c randomtestcard2.c randomtestcard3.c
 	gcc -fprofile-arcs -ftest-coverage -o randomtestcard1 -g randomtestcard1.c dominion.o rngs.o $(CFLAGS)
 	gcc -fprofile-arcs -ftest-coverage -o randomtestcard2 -g randomtestcard2.c dominion.o rngs.o $(CFLAGS)
 	gcc -fprofile-arcs -ftest-coverage -o randomtestcard3 -g randomtestcard3.c dominion.o rngs.o $(CFLAGS)
-	./randomtestcard1 &> randomtestresults.out
-	./randomtestcard2 >> randomtestresults.out
-	./randomtestcard3 >> randomtestresults.out
-	gcov -f randomtestcard1.c >> randomtestresults.out
+	./randomtestcard1 &> tmpresults.txt
+	./randomtestcard2 >> tmpresults.txt
+	./randomtestcard3 >> tmpresults.txt
+	gcov -f randomtestcard1.c &> randomtestresults.out
 	gcov -f randomtestcard2.c >> randomtestresults.out
 	gcov -f randomtestcard3.c >> randomtestresults.out
 	gcov -fb dominion.c >> randomtestresults.out
-	cat dominion.c.gcov >> randomtestresults.out
-	cat randomtestcard1.c.gcov >> randomtestresults.out
-
+	cat tmpresults.txt >> randomtestresults.out
+	rm -f tmpresults.txt
 
 player: player.c interface.o
 	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)

@@ -67,67 +67,80 @@
      1001:   62:        preG.deckCount[player2] = rand() % 6; //between 0 and 5
      1001:   63:        preG.discardCount[player2] = rand() % 6; //between 0 and 5
         -:   64:
-     3540:   65:        for(int i = 0; i < preG.deckCount[player2]; i++) //use non-randomized player hand size to randomize player1s hand
+     3462:   65:        for(int i = 0; i < preG.deckCount[player2]; i++) //use non-randomized player hand size to randomize player1s hand
         -:   66:        {
-     2539:   67:            preG.deck[player1][i] = rand() % 27; //0 to 26
+     2461:   67:            preG.deck[player1][i] = rand() % 27; //0 to 26
         -:   68:        }
         -:   69:
-     3512:   70:        for(int i = 0; i < preG.discardCount[player2]; i++) //use non-randomized player hand size to randomize player2s hand
+     3553:   70:        for(int i = 0; i < preG.discardCount[player2]; i++) //use non-randomized player hand size to randomize player2s hand
         -:   71:        {
-     2511:   72:            preG.discard[player2][i] = rand() % 27; //0 to 26
+     2552:   72:            preG.discard[player2][i] = rand() % 27; //0 to 26
         -:   73:        }
         -:   74:
      1001:   75:        if(preG.deckCount[player2] + preG.discardCount[player2] <= 1)
         -:   76:        {
-       76:   77:            if(preG.deckCount[player2] > 0)
+       81:   77:            if(preG.deckCount[player2] > 0)
         -:   78:            {
-       28:   79:                tribReveal[0] = preG.deck[player2][preG.deckCount[player2] - 1];
-       28:   80:                deckDiscard = 1;
+       29:   79:                tribReveal[0] = preG.deck[player2][preG.deckCount[player2] - 1];
+       29:   80:                deckDiscard = 1;
         -:   81:            }
-       48:   82:            else if(preG.discardCount[player2] > 0)
+       52:   82:            else if(preG.discardCount[player2] > 0)
         -:   83:            {
-       29:   84:                tribReveal[0] = preG.discard[player2][preG.discardCount[player2] - 1];
-       29:   85:                discardDiscard = 1;
+       28:   84:                tribReveal[0] = preG.discard[player2][preG.discardCount[player2] - 1];
+       28:   85:                discardDiscard = 1;
         -:   86:            }
         -:   87:        }
         -:   88:        else
         -:   89:        {
-      925:   90:            tribReveal[0] = preG.deck[player2][preG.deckCount[player2]-1];
-      925:   91:            tribReveal[1] = preG.deck[player2][preG.deckCount[player2]-2];
-      925:   92:            deckDiscard = 2;
-        -:   93:        }
-        -:   94:                
-     3003:   95:        for(int i = 0; i < 2; i++)
-        -:   96:        {
-     2002:   97:            if(tribReveal[i] == copper || tribReveal[i] == silver || tribReveal[i] == gold)
-        -:   98:            {
-     1197:   99:                coinsGained += 2;
+      920:   90:            if(preG.deckCount[player2] == 0)
+        -:   91:            {
+      121:   92:                tribReveal[0] = preG.discard[player2][preG.discardCount[player2]-1];
+      121:   93:                tribReveal[1] = preG.discard[player2][preG.discardCount[player2]-2];
+        -:   94:            }
+        -:   95:            else
+        -:   96:            {            
+      799:   97:                tribReveal[0] = preG.deck[player2][preG.deckCount[player2]-1];
+      799:   98:                tribReveal[1] = preG.deck[player2][preG.deckCount[player2]-2];
+      799:   99:                deckDiscard = 2;
         -:  100:            }
-      805:  101:            else if(tribReveal[i] == estate || tribReveal[i] == duchy || tribReveal[i] == province || tribReveal[i] == gardens || tribReveal[i] == great_hall)
-        -:  102:            {
-      326:  103:                cardsGainedP1 += 2;
-        -:  104:            }
-      479:  105:            else if(tribReveal[i] <= 0 && tribReveal[i] >= 26)
-        -:  106:            {
-    #####:  107:                actionsGained += 2;
-        -:  108:            }
-        -:  109:        }
-        -:  110:
-     1001:  111:        memcpy(&postG, &preG, sizeof(struct gameState));
-        -:  112:
-     1001:  113:        tributeLogic(&postG, player1, player2);
-        -:  114:
-     1001:  115:        printf("\nTest Number: %d\n", count);
-     1001:  116:        printf("\tPlayer 1:\n");
-     1001:  117:        printError(&preG, &postG, coinsGained, discardedP1, cardsGainedP1, actionsGained, player1);
-     1001:  118:        printf("\tPlayer 2:\n");
-     1001:  119:        printf("\t\tDeck count:\n");
-     1001:  120:        printf("\t\t\tExpected: %d, After: %d\n", preG.deckCount[player2] - deckDiscard, postG.deckCount[player2]);
-     1001:  121:        printf("\t\tDiscard count:\n");
-     1001:  122:        printf("\t\t\tExpected: %d, After: %d\n", preG.discardCount[player2] - discardDiscard, postG.discardCount[player2]);
+        -:  101:        }
+        -:  102:
+     1001:  103:        if(tribReveal[0] == tribReveal[1])
+        -:  104:        {
+      357:  105:            tribReveal[1] = -1;
+        -:  106:        }
+        -:  107:                
+     3003:  108:        for(int i = 0; i < 2; i++)
+        -:  109:        {
+     2002:  110:            if(tribReveal[i] == copper || tribReveal[i] == silver || tribReveal[i] == gold)
+        -:  111:            {
+      862:  112:                coinsGained += 2;
+        -:  113:            }
+     1140:  114:            else if(tribReveal[i] == estate || tribReveal[i] == duchy || tribReveal[i] == province || tribReveal[i] == gardens || tribReveal[i] == great_hall)
+        -:  115:            {
+      377:  116:                cardsGainedP1 += 2;
+        -:  117:            }
+      763:  118:            else if(tribReveal[i] != -1)
+        -:  119:            {
+      325:  120:                actionsGained += 2;
+        -:  121:            }
+        -:  122:        }
         -:  123:
-     1001:  124:        count++;
-        -:  125:    }
-        -:  126:
-        1:  127:    return 0;
-        -:  128:}
+     1001:  124:        memcpy(&postG, &preG, sizeof(struct gameState));
+        -:  125:
+     1001:  126:        tributeLogic(&postG, player1, player2);
+        -:  127:
+     1001:  128:        printf("\nTest Number: %d\n", count);
+     1001:  129:        printf("\tPlayer 1:\n");
+     1001:  130:        printError(&preG, &postG, coinsGained, discardedP1, cardsGainedP1, actionsGained, player1);
+     1001:  131:        printf("\tPlayer 2:\n");
+     1001:  132:        printf("\t\tDeck count:\n");
+     1001:  133:        printf("\t\t\tExpected: %d, After: %d\n", preG.deckCount[player2] - deckDiscard, postG.deckCount[player2]);
+     1001:  134:        printf("\t\tDiscard count:\n");
+     1001:  135:        printf("\t\t\tExpected: %d, After: %d\n", preG.discardCount[player2] - discardDiscard, postG.discardCount[player2]);
+        -:  136:
+     1001:  137:        count++;
+        -:  138:    }
+        -:  139:
+        1:  140:    return 0;
+        -:  141:}
