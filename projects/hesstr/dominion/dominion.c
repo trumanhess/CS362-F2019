@@ -770,7 +770,7 @@ int mineLogic(int choice1, int choice2, struct gameState *state, int handPos, in
     return 0;
 }
 
-int minionLogic(int choice1, int choice2, struct gameState *state, int handPos, int currentPlayer)
+int minionLogic(int choice1, struct gameState *state, int handPos, int currentPlayer)
 {
     //+1 action
     state->numActions++;
@@ -1135,7 +1135,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
         return 0;
 
     case minion:
-        minionLogic(choice1, choice2, state, handPos, currentPlayer);
+        minionLogic(choice1, state, handPos, currentPlayer);
 
     case steward:
         if (choice1 == 1)
