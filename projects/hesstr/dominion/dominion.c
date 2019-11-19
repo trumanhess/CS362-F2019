@@ -778,11 +778,11 @@ int minionLogic(int choice1, int choice2, struct gameState *state, int handPos, 
     //discard card from hand
     discardCard(handPos, currentPlayer, state, 0); 
 
-    if (choice2) //bug here! choice1 supposed to be first, not choice2
+    if (choice1 == 2) //bug here! choice1 supposed to be first, not choice2
     {
         state->coins = state->coins + 2;
     }
-    else if (choice1) //discard hand, redraw 4, other players with 5+ cards discard hand and draw 4
+    else if (choice1 == 1) //discard hand, redraw 4, other players with 5+ cards discard hand and draw 4
     {
         //other players discard hand and redraw if hand size > 4
         for(int i = 0; i < state->numPlayers; i++)
