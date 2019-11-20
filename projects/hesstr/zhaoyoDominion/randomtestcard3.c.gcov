@@ -1,0 +1,149 @@
+        -:    0:Source:randomtestcard3.c
+        -:    0:Graph:randomtestcard3.gcno
+        -:    0:Data:randomtestcard3.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include "dominion.h"
+        -:    2:#include "dominion_helpers.h"
+        -:    3:#include <string.h>
+        -:    4:#include <stdio.h>
+        -:    5:#include "rngs.h"
+        -:    6:
+        -:    7:#define MAX_HAND_COUNT 10
+        -:    8:
+     1001:    9:int printError(struct gameState *pre, struct gameState *post, int coinsGained, int discarded, 
+        -:   10:    int cardsGained, int actionsGained, int player)
+        -:   11:{
+     1001:   12:    if((pre->numActions + actionsGained) != post->numActions || post->handCount[player] != pre->handCount[player] - discarded + cardsGained || (pre->coins + coinsGained) != post->coins)
+        -:   13:    {
+      638:   14:        printf("\t\tNumber of Actions:\n");
+      638:   15:        printf("\t\t\tExpected: %d, Actual: %d\n", pre->numActions + actionsGained, post->numActions);
+        -:   16:
+      638:   17:        printf("\t\tNumber coins:\n");
+      638:   18:        printf("\t\t\tExpected = %d, Actual = %d\n", pre->coins + coinsGained, post->coins);
+        -:   19:
+      638:   20:        printf("\t\tHand count:\n");
+      638:   21:        printf("\t\t\tExpected = %d, Actual = %d\n", pre->handCount[player] - discarded + cardsGained, post->handCount[player]);
+        -:   22:    }
+        -:   23:
+     1001:   24:    return 0;
+        -:   25:}
+        -:   26:
+        1:   27:int main()
+        -:   28:{
+        1:   29:    int cardsGainedP1 = 0;
+        1:   30:    int discardedP1 = 0;
+        1:   31:    int coinsGained = 0;
+        1:   32:    int actionsGained = 0;
+        1:   33:    int expectedTribReveal[2] = {-1, -1};
+        1:   34:    int deckDiscard = 0;
+        1:   35:    int discardDiscard = 0;
+        -:   36:
+        1:   37:    int inputTrib[2] = {-1, -1};
+        -:   38:
+        1:   39:    int seed = 1000;
+        1:   40:    int numPlayers = 2;
+        1:   41:    int player1 = 0, player2 = 1;
+        -:   42:	struct gameState preG, postG;
+        1:   43:	int k[10] = {adventurer, embargo, village, minion, mine, cutpurse,
+        -:   44:			sea_hag, baron, smithy, council_room};
+        -:   45:
+        1:   46:    printf("\n\n-------------Randomly Testing Tribute---------\n\n");
+        1:   47:    initializeGame(numPlayers, k, seed, &preG);
+        -:   48:
+        1:   49:    srand(time(NULL));
+        -:   50:
+        1:   51:    int count = 0;
+        -:   52:
+     1003:   53:    while(count <= 1000)
+        -:   54:    {
+     1001:   55:        expectedTribReveal[0] = -1;
+     1001:   56:        expectedTribReveal[1] = -1;
+     1001:   57:        cardsGainedP1 = 0;
+     1001:   58:        discardedP1 = 0;
+     1001:   59:        coinsGained = 0;
+     1001:   60:        actionsGained = 0;
+     1001:   61:        deckDiscard = 0;
+     1001:   62:        discardDiscard = 0;
+        -:   63:
+     1001:   64:        preG.deckCount[player2] = rand() % 6; //between 0 and 5
+     1001:   65:        preG.discardCount[player2] = rand() % 6; //between 0 and 5
+        -:   66:
+     3511:   67:        for(int i = 0; i < preG.deckCount[player2]; i++) //use non-randomized player hand size to randomize player1s hand
+        -:   68:        {
+     2510:   69:            preG.deck[player1][i] = rand() % 27; //0 to 26
+        -:   70:        }
+        -:   71:
+     3532:   72:        for(int i = 0; i < preG.discardCount[player2]; i++) //use non-randomized player hand size to randomize player2s hand
+        -:   73:        {
+     2531:   74:            preG.discard[player2][i] = rand() % 27; //0 to 26
+        -:   75:        }
+        -:   76:
+     1001:   77:        if(preG.deckCount[player2] + preG.discardCount[player2] <= 1)
+        -:   78:        {
+       87:   79:            if(preG.deckCount[player2] > 0)
+        -:   80:            {
+       24:   81:                expectedTribReveal[0] = preG.deck[player2][preG.deckCount[player2] - 1];
+       24:   82:                deckDiscard = 1;
+        -:   83:            }
+       63:   84:            else if(preG.discardCount[player2] > 0)
+        -:   85:            {
+       28:   86:                expectedTribReveal[0] = preG.discard[player2][preG.discardCount[player2] - 1];
+       28:   87:                discardDiscard = 1;
+        -:   88:            }
+        -:   89:        }
+        -:   90:        else
+        -:   91:        {
+      914:   92:            if(preG.deckCount[player2] == 0)
+        -:   93:            {
+      118:   94:                expectedTribReveal[0] = preG.discard[player2][preG.discardCount[player2]-1];
+      118:   95:                expectedTribReveal[1] = preG.discard[player2][preG.discardCount[player2]-2];
+        -:   96:            }
+        -:   97:            else
+        -:   98:            {            
+      796:   99:                expectedTribReveal[0] = preG.deck[player2][preG.deckCount[player2]-1];
+      796:  100:                expectedTribReveal[1] = preG.deck[player2][preG.deckCount[player2]-2];
+      796:  101:                deckDiscard = 2;
+        -:  102:            }
+        -:  103:        }
+        -:  104:
+     1001:  105:        if(expectedTribReveal[0] == expectedTribReveal[1])
+        -:  106:        {
+      370:  107:            expectedTribReveal[1] = -1;
+        -:  108:        }
+        -:  109:                
+     3003:  110:        for(int i = 0; i < 2; i++)
+        -:  111:        {
+     2002:  112:            if(expectedTribReveal[i] == copper || expectedTribReveal[i] == silver || expectedTribReveal[i] == gold)
+        -:  113:            {
+      851:  114:                coinsGained += 2;
+        -:  115:            }
+     1151:  116:            else if(expectedTribReveal[i] == estate || expectedTribReveal[i] == duchy || expectedTribReveal[i] == province || expectedTribReveal[i] == gardens || expectedTribReveal[i] == great_hall)
+        -:  117:            {
+      391:  118:                cardsGainedP1 += 2;
+        -:  119:            }
+      760:  120:            else if(expectedTribReveal[i] != -1)
+        -:  121:            {
+      303:  122:                actionsGained += 2;
+        -:  123:            }
+        -:  124:        }
+        -:  125:
+     1001:  126:        memcpy(&postG, &preG, sizeof(struct gameState));
+        -:  127:
+     1001:  128:        card_tribute(&postG, player2, &inputTrib, player1);
+        -:  129:        //void card_tribute(struct gameState *state,int nextPlayer,int *tributeRevealedCards,int currentPlayer){
+        -:  130:
+     1001:  131:        printf("\nTest Number: %d\n", count);
+     1001:  132:        printf("\tPlayer 1:\n");
+     1001:  133:        printError(&preG, &postG, coinsGained, discardedP1, cardsGainedP1, actionsGained, player1);
+     1001:  134:        printf("\tPlayer 2:\n");
+     1001:  135:        printf("\t\tDeck count:\n");
+     1001:  136:        printf("\t\t\tExpected: %d, After: %d\n", preG.deckCount[player2] - deckDiscard, postG.deckCount[player2]);
+     1001:  137:        printf("\t\tDiscard count:\n");
+     1001:  138:        printf("\t\t\tExpected: %d, After: %d\n", preG.discardCount[player2] - discardDiscard, postG.discardCount[player2]);
+        -:  139:
+     1001:  140:        count++;
+        -:  141:    }
+        -:  142:
+        1:  143:    return 0;
+        -:  144:}

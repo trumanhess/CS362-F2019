@@ -1,0 +1,97 @@
+        -:    0:Source:randomtestcard1.c
+        -:    0:Graph:randomtestcard1.gcno
+        -:    0:Data:randomtestcard1.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include "dominion.h"
+        -:    2:#include "dominion_helpers.h"
+        -:    3:#include <string.h>
+        -:    4:#include <stdio.h>
+        -:    5:#include "rngs.h"
+        -:    6:
+        -:    7:#define MAX_HAND_COUNT 10
+        -:    8:
+     1001:    9:int printError(struct gameState *pre, struct gameState *post, int coinsGained, int discarded, int cardsGained, int buysGained, int player, int testNum)
+        -:   10:{
+     1001:   11:    if((pre->numBuys + buysGained) != post->numBuys || post->handCount[player] != pre->handCount[player] - discarded + cardsGained || (pre->coins + coinsGained) != post->coins)
+        -:   12:    {
+        -:   13:        //print out player state, expected and actual as well as test number
+      904:   14:        printf("\nTest Number: %d\n", testNum);
+        -:   15:
+      904:   16:        printf("\tNumber of Buys:\n");
+      904:   17:        printf("\t\tExpected: %d, Actual: %d\n", pre->numBuys + buysGained, post->numBuys);
+        -:   18:
+      904:   19:        printf("\tNumber coins:\n");
+      904:   20:        printf("\t\tExpected = %d, Actual = %d\n", pre->coins + coinsGained, post->coins);
+        -:   21:
+      904:   22:        printf("\tHand count:\n");
+      904:   23:        printf("\t\tExpected = %d, Actual = %d\n", pre->handCount[player] - discarded + cardsGained, post->handCount[player]);
+        -:   24:    }
+        -:   25:
+     1001:   26:    return 0;
+        -:   27:}
+        -:   28:
+        1:   29:int main()
+        -:   30:{
+        1:   31:    int cardsGained = 0;
+        1:   32:    int discarded = 0;
+        1:   33:    int coinsGained = 0;
+        1:   34:    int buysGained = 0;
+        -:   35:
+        1:   36:    int choice1 = 0;
+        1:   37:    int seed = 1000;
+        1:   38:    int numPlayers = 2;
+        1:   39:    int player1 = 0;
+        1:   40:    int player2 = 1;
+        -:   41:	struct gameState preG, postG;
+        1:   42:	int k[10] = {adventurer, embargo, village, minion, mine, cutpurse,
+        -:   43:			sea_hag, baron, smithy, council_room};
+        -:   44:
+        1:   45:    printf("\n\n-------------Randomly Testing Baron---------\n\n");
+        1:   46:    initializeGame(numPlayers, k, seed, &preG);
+        -:   47:
+        1:   48:    srand(time(NULL));
+        -:   49:
+        1:   50:    int count = 0;
+        -:   51:
+     1003:   52:    while(count <= 1000)
+        -:   53:    {
+     1001:   54:        coinsGained = 0;
+     1001:   55:        buysGained = 0;
+     1001:   56:        discarded = 0;
+     1001:   57:        cardsGained = 0;
+        -:   58:
+     1001:   59:        choice1 = rand() % 2; //choose to either get rid of an estate or not
+        -:   60:
+     6006:   61:        for(int i = 0; i < preG.handCount[player1]; i++) //use non-randomized player hand size to randomize the players hand
+        -:   62:        {
+     5005:   63:            preG.hand[player1][i] = rand() % 27; //0 to 26
+        -:   64:        }
+        -:   65:
+        -:   66:        //randomize supply count for estates
+     1001:   67:        preG.supplyCount[estate] = rand() % 12 + (-5); //generate random numbers between -5 and 6
+        -:   68:
+     1001:   69:        buysGained = 1;
+     1001:   70:        if(choice1 == 1)
+        -:   71:        {
+      514:   72:            coinsGained = 4;
+      514:   73:            discarded = 1;
+        -:   74:        }
+        -:   75:        else
+        -:   76:        {
+      487:   77:            cardsGained = 1;
+        -:   78:        }
+        -:   79:        
+     1001:   80:        memcpy(&postG, &preG, sizeof(struct gameState));
+        -:   81:
+     1001:   82:        card_baron(choice1, &postG, player1, player2);
+        -:   83:
+     1001:   84:        printError(&preG, &postG, coinsGained, discarded, cardsGained, buysGained, player1, count);
+        -:   85:
+     1001:   86:        count++;
+        -:   87:    }
+        -:   88:
+        1:   89:    return 0;
+        -:   90:}
+        -:   91:
+        -:   92://how do we want to catch errors in a random tester?
