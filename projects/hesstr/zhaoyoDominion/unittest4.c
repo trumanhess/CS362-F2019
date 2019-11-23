@@ -81,10 +81,12 @@ int main()
 	card_tribute(&postG, player2, tributeRevealedCards, player1);
     //card_tribute(struct gameState *state,int nextPlayer,int *tributeRevealedCards,int currentPlayer)
 
+    ASSERT(preG.numActions + actionsGained == postG.numActions);
+
     universalTest(&preG, &postG, cardsDiscarded, cardsGained, buysGained, coinsGained, actionsGained, player1);
 
 /*
-    test 2: player2 has one card in hand (copper)
+    test 2: player2 has one card in deck (copper)
     expect: player1 gain +2 coin; player2 one less card in hand (potentially a full deck because he would shuffle a new hand?)
 */
     printf("\n\nTest 2:\n");
@@ -204,6 +206,57 @@ int main()
     universalTest(&preG, &postG, cardsDiscarded, cardsGained, buysGained, coinsGained, actionsGained, player1);
 
     ASSERT(preG.handCount[player2] - 2 == postG.handCount[player2]);
+
+    /*
+    test 6: player2 has two cards in discard (treasure, victory)
+    expect: player2 will shuffle discard into deck and player1 will gain stats from the top two cards
+*/
+    printf("\n\nTest 6:\n");
+
+    preG.hand[player1][0] = minion;
+	preG.hand[player1][1] = copper;
+	preG.hand[player1][2] = tribute;
+	preG.hand[player1][3] = estate;
+	preG.hand[player1][4] = mine;
+    preG.discard[player1][0] = mine;
+
+    preG.discard[player2][0] = copper;
+    preG.discard[player2][1] = estate;
+    preG.discard[player2][2] = estate;
+    preG.discard[player2][3] = copper;
+    preG.discardCount[player2] = 4;
+    preG.deckCount[player2] = 0;
+    //discardCard(handPos, currentPlayer, state, 0);
+
+    for(int i = 0; i < preG.discardCount[player2]; i++)
+    {
+        printf("\ndiscard Card: %d\n", preG.discard[player2][i]);
+    }
+
+    cardsDiscarded = 0;
+    buysGained = 0;
+    coinsGained = 2;
+    actionsGained = 0;
+    cardsGained = 2;
+    memcpy(&postG, &preG, sizeof(struct gameState));
+    
+	card_tribute(&postG, player2, tributeRevealedCards, player1);
+
+    printf("\nDiscard before: %d, Discard after: %d\n", preG.discardCount[player2], postG.discardCount[player2]);
+    printf("\nDeck before: %d, Deck after: %d\n", preG.deckCount[player2], postG.deckCount[player2]);
+
+    ASSERT((preG.discardCount[player2] - preG.discardCount[player2]) == postG.discardCount[player2]);
+    ASSERT((preG.deckCount[player2] + preG.discardCount[player2] - 2) == postG.deckCount[player2]);
+
+    for(int i = 0; i < postG.discardCount[player2]; i++)
+    {
+        printf("\ndiscard Card after: %d\n", postG.discard[player2][i]);
+    }
+
+    universalTest(&preG, &postG, cardsDiscarded, cardsGained, buysGained, coinsGained, actionsGained, player1);
+
+    //ASSERT(preG.deckCount[player2] - 1 == postG.deckCount[player2]);
+    //check player2 deck and discard piles
 
         printf("\n\n---------------------------------End Testing Tribute--------------------------\n\n");
 

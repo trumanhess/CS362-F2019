@@ -146,6 +146,8 @@ int main()
 	preG.hand[thisPlayer][2] = duchy;
 	preG.hand[thisPlayer][3] = estate;
 	preG.hand[thisPlayer][4] = mine;
+    preG.handCount[thisPlayer] = 5;
+    handpos = 4;
     updateCoins(thisPlayer, &preG, 4);
 
     memcpy(&postG, &preG, sizeof(struct gameState));
@@ -159,6 +161,9 @@ int main()
 	card_mine(&j, &postG, thisPlayer, choice1, choice2, handpos);
 
     universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
+
+    ASSERT(postG.hand[thisPlayer][choice1] == choice2);
+
 
 /* 
     test 5: lose a estate, try to gain a mine

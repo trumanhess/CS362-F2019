@@ -111,7 +111,8 @@ int main()
 	preG.hand[player2][3] = estate;
 
     memcpy(&postG, &preG, sizeof(struct gameState));
-    choice1 = 2;
+    choice1 = 0;
+    choice2 = 1;
     cardsDiscarded = 5;
     buysGained = 0;
     coinsGained = 0;
@@ -145,7 +146,8 @@ int main()
     preG.hand[player2][4] = mine;
 
     memcpy(&postG, &preG, sizeof(struct gameState));
-    choice1 = 2; //choose to gain a new hand
+    choice1 = 0; //choose to gain a new hand
+    choice2 = 1;
     cardsDiscarded = 3;
     buysGained = 0;
     coinsGained = 0;

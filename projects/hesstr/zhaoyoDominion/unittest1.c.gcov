@@ -3,93 +3,93 @@
         -:    0:Data:unittest1.gcda
         -:    0:Runs:1
         -:    0:Programs:1
-        -:    1://NEED TO ZERO OUT GAME STRUCTS AFTER USING THEM!!
-        -:    2:#include "dominion.h"
-        -:    3:#include "dominion_helpers.h"
-        -:    4:#include <string.h>
-        -:    5:#include <stdio.h>
-        -:    6:#include "rngs.h"
-        -:    7:#include "custom_assert.h"
-        -:    8:
-        -:    9:/*
-        -:   10:    test 1: get rid of estate and have one in hand
-        -:   11:    test 2: get rid of estate, but not have one in hand
-        -:   12:    test 3: gain an estate
-        -:   13:    test 4: try to gain an estate, but negative amount of estates in supply
-        -:   14:*/
-        -:   15:
-        4:   16:int universalTest(struct gameState *pre, struct gameState *post, int discarded, int cardsGained, int buysGained, int coinsGained, int actionsGained, int player)
-        -:   17:{
-        4:   18:    printf("Number buys:\n");
-        4:   19:    ASSERT((pre->numBuys + buysGained) == post->numBuys);
-        4:   20:    printf("\texpected = %d, actual = %d\n", pre->numBuys + buysGained, post->numBuys);
-        -:   21:
-        4:   22:    printf("Number Actions:\n");
-        4:   23:    ASSERT(post->numActions == pre->numActions + actionsGained);
-        4:   24:    printf("\texpected = %d, actual = %d\n", pre->numActions + actionsGained, post->numActions);
-        -:   25:
-        4:   26:    printf("Number coins:\n");
-        4:   27:    ASSERT((pre->coins + coinsGained) == post->coins);
-        4:   28:    printf("\texpected = %d, actual = %d\n", pre->coins + coinsGained, post->coins);
-        -:   29:
-        4:   30:    printf("Hand count:\n");
-        4:   31:    ASSERT(post->handCount[player] == pre->handCount[player] - discarded + cardsGained);
-        4:   32:    printf("\texpected = %d, actual = %d\n", pre->handCount[player] - discarded + cardsGained, post->handCount[player]);
-        -:   33:
-        4:   34:    return 0;
-        -:   35:}
-        -:   36:
-        1:   37:int main()
-        -:   38:{
-        1:   39:    int cardsGained = 0;
-        1:   40:    int discarded = 0;
-        1:   41:    int coinsGained = 0;
-        1:   42:    int buysGained = 0;
-        1:   43:    int actionsGained = 0;
-        -:   44:
-        1:   45:    int choice1 = 0;
-        1:   46:    int seed = 1000;
-        1:   47:    int numPlayers = 2;
-        1:   48:    int thisPlayer = 0;
-        1:   49:    int nextPlayer = 1;
-        -:   50:	struct gameState preG, postG;
-        1:   51:	int k[10] = {adventurer, embargo, village, minion, mine, cutpurse,
-        -:   52:			sea_hag, baron, smithy, council_room};
-        -:   53:
-        1:   54:    printf("\n\n-------------Testing Baron---------\n\n");
-        1:   55:    initializeGame(numPlayers, k, seed, &preG);
-        -:   56:
-        -:   57:/* 
-        -:   58:    test 1: get rid of estate and have one in hand
-        -:   59:    expect: to get rid of estate and gain +4 coins 
-        -:   60:*/
-        1:   61:    printf("\n\nTest 1:\n");
-        -:   62:
-        -:   63:    //set players hand
-        1:   64:    preG.hand[thisPlayer][0] = steward;
-        1:   65:	preG.hand[thisPlayer][1] = copper;
-        1:   66:	preG.hand[thisPlayer][2] = duchy;
-        1:   67:	preG.hand[thisPlayer][3] = estate;
-        1:   68:	preG.hand[thisPlayer][4] = feast;
-        -:   69:
-        1:   70:    memcpy(&postG, &preG, sizeof(struct gameState));
-        1:   71:	choice1 = 1;
-        1:   72:    discarded = 1;
-        1:   73:    buysGained = 1;
-        1:   74:    coinsGained = 4;
-        1:   75:    actionsGained = 0;
-        1:   76:    cardsGained = 0;
-        1:   77:	card_baron(choice1, &postG, thisPlayer, nextPlayer);
-        -:   78:
-        1:   79:    universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
-        5:   80:    for(int i = 0; i < postG.handCount[thisPlayer]; i++)
+        -:    1:#include "dominion.h"
+        -:    2:#include "dominion_helpers.h"
+        -:    3:#include <string.h>
+        -:    4:#include <stdio.h>
+        -:    5:#include "rngs.h"
+        -:    6:#include "custom_assert.h"
+        -:    7:
+        -:    8:/*
+        -:    9:    test 1: get rid of estate and have one in hand
+        -:   10:    test 2: get rid of estate, but not have one in hand
+        -:   11:    test 3: gain an estate
+        -:   12:    test 4: try to gain an estate, but negative amount of estates in supply
+        -:   13:*/
+        -:   14:
+        4:   15:int universalTest(struct gameState *pre, struct gameState *post, int discarded, int cardsGained, int buysGained, int coinsGained, int actionsGained, int player)
+        -:   16:{
+        4:   17:    printf("Number buys:\n");
+        4:   18:    ASSERT((pre->numBuys + buysGained) == post->numBuys);
+        4:   19:    printf("\texpected = %d, actual = %d\n", pre->numBuys + buysGained, post->numBuys);
+        -:   20:
+        4:   21:    printf("Number Actions:\n");
+        4:   22:    ASSERT(post->numActions == pre->numActions + actionsGained);
+        4:   23:    printf("\texpected = %d, actual = %d\n", pre->numActions + actionsGained, post->numActions);
+        -:   24:
+        4:   25:    printf("Number coins:\n");
+        4:   26:    ASSERT((pre->coins + coinsGained) == post->coins);
+        4:   27:    printf("\texpected = %d, actual = %d\n", pre->coins + coinsGained, post->coins);
+        -:   28:
+        4:   29:    printf("Discard count:\n");
+        4:   30:    ASSERT(post->discardCount[player] == pre->discardCount[player] + cardsGained);
+        4:   31:    printf("\texpected = %d, actual = %d\n", pre->discardCount[player] + cardsGained, post->discardCount[player]);
+        -:   32:
+        4:   33:    return 0;
+        -:   34:}
+        -:   35:
+        1:   36:int main()
+        -:   37:{
+        1:   38:    int cardsGained = 0;
+        1:   39:    int discarded = 0;
+        1:   40:    int coinsGained = 0;
+        1:   41:    int buysGained = 0;
+        1:   42:    int actionsGained = 0;
+        -:   43:
+        1:   44:    int choice1 = 0;
+        1:   45:    int seed = 1000;
+        1:   46:    int numPlayers = 2;
+        1:   47:    int thisPlayer = 0;
+        1:   48:    int nextPlayer = 1;
+        -:   49:	struct gameState preG, postG;
+        1:   50:	int k[10] = {adventurer, embargo, village, minion, mine, cutpurse,
+        -:   51:			sea_hag, baron, smithy, council_room};
+        -:   52:
+        1:   53:    printf("\n\n-------------Testing Baron---------\n\n");
+        1:   54:    initializeGame(numPlayers, k, seed, &preG);
+        -:   55:
+        -:   56:/* 
+        -:   57:    test 1: get rid of estate and have one in hand
+        -:   58:    expect: to get rid of estate and gain +4 coins 
+        -:   59:*/
+        1:   60:    printf("\n\nTest 1:\n");
+        -:   61:
+        -:   62:    //set players hand
+        1:   63:    preG.hand[thisPlayer][0] = steward;
+        1:   64:	preG.hand[thisPlayer][1] = copper;
+        1:   65:	preG.hand[thisPlayer][2] = duchy;
+        1:   66:	preG.hand[thisPlayer][3] = estate;
+        1:   67:	preG.hand[thisPlayer][4] = feast;
+        -:   68:
+        1:   69:    memcpy(&postG, &preG, sizeof(struct gameState));
+        1:   70:	choice1 = 1;
+        1:   71:    discarded = 1;
+        1:   72:    buysGained = 1;
+        1:   73:    coinsGained = 4;
+        1:   74:    actionsGained = 0;
+        1:   75:    cardsGained = 0;
+        1:   76:	card_baron(choice1, &postG, thisPlayer, nextPlayer);
+        -:   77:
+        1:   78:    universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
+        1:   79:    ASSERT(preG.handCount[thisPlayer] - discarded == postG.handCount[thisPlayer]);
+        -:   80:    /*for(int i = 0; i < postG.handCount[thisPlayer]; i++)
         -:   81:    {
-        4:   82:        ASSERT(postG.hand[thisPlayer][i] != estate);
-        4:   83:        if(postG.hand[thisPlayer][i] == estate)
+        -:   82:        ASSERT(postG.hand[thisPlayer][i] != estate);
+        -:   83:        if(postG.hand[thisPlayer][i] == estate)
         -:   84:        {
-    #####:   85:            printf("estate found in hand at %d\n", i);
+        -:   85:            printf("estate found in hand at %d\n", i);
         -:   86:        }
-        -:   87:    }
+        -:   87:    }*/
         -:   88:
         -:   89:/* 
         -:   90:    test 2: get rid of estate, but not have one in hand
@@ -112,66 +112,76 @@
         1:  107:    actionsGained = 0;
         1:  108:    cardsGained = 1;
         1:  109:	card_baron(choice1, &postG, thisPlayer, nextPlayer);
-        1:  110:    printf("postG: %d\n", postG.numBuys);
-        -:  111:
-        1:  112:    universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
-        -:  113:
-        -:  114:    //the player should gain an estate at the highest hand pos
-        1:  115:    ASSERT(postG.hand[thisPlayer][preG.handCount[thisPlayer] + 1] == estate);
-        -:  116:
-        -:  117:/* 
-        -:  118:    test 3:
-        -:  119:    to what happens when player chooses to gain an estate 
-        -:  120:*/
-        1:  121:    printf("\n\nTest 3:\n");
-        -:  122:
-        -:  123:    //set players hand
-        1:  124:    preG.hand[thisPlayer][0] = steward;
-        1:  125:	preG.hand[thisPlayer][1] = copper;
-        1:  126:	preG.hand[thisPlayer][2] = duchy;
-        1:  127:	preG.hand[thisPlayer][3] = feast;
-        -:  128:
-        1:  129:    memcpy(&postG, &preG, sizeof(struct gameState));
-        1:  130:	choice1 = 0;
-        1:  131:    discarded = 0;
-        1:  132:    buysGained = 1;
-        1:  133:    coinsGained = 0;
-        1:  134:    actionsGained = 0;
-        1:  135:    cardsGained = 1;
-        1:  136:	card_baron(choice1, &postG, thisPlayer, nextPlayer);
-        -:  137:
-        1:  138:    universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
-        -:  139:
-        1:  140:    ASSERT(postG.hand[thisPlayer][postG.handCount[thisPlayer]] == estate);
-        -:  141:
-        -:  142:/*
-        -:  143:    test 4:
-        -:  144:    expected: to not gain an estate card, everything stays the same, except you get +1 buys
-        -:  145:*/
-        1:  146:    printf("\n\nTest 4:\n");
-        -:  147:
-        1:  148:    preG.hand[thisPlayer][0] = steward;
-        1:  149:	preG.hand[thisPlayer][1] = copper;
-        1:  150:	preG.hand[thisPlayer][2] = duchy;
-        1:  151:	preG.hand[thisPlayer][3] = estate;
-        1:  152:	preG.hand[thisPlayer][4] = feast;
-        1:  153:    preG.supplyCount[estate] = -1;
-        1:  154:    preG.handCount[thisPlayer] = 5;
-        -:  155:
-        1:  156:    memcpy(&postG, &preG, sizeof(struct gameState));
-        1:  157:	choice1 = 0;
-        1:  158:    discarded = 0;
-        1:  159:    buysGained = 1;
-        1:  160:    coinsGained = 0;
-        1:  161:    actionsGained = 0;
-        1:  162:    cardsGained = 0;
-        1:  163:	card_baron(choice1, &postG, thisPlayer, nextPlayer);
-        -:  164:
-        1:  165:    universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
-        -:  166:
-        1:  167:    ASSERT(postG.supplyCount[estate] == preG.supplyCount[estate]);
-        -:  168:
-        1:  169:    printf("\n\n-------------End Testing Baron---------------\n\n");
-        -:  170:
-        1:  171:    return 0;
-        -:  172:}
+        -:  110:
+        1:  111:    universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
+        1:  112:    ASSERT(preG.discardCount[thisPlayer] + 1 == postG.discardCount[thisPlayer]);
+        1:  113:    ASSERT(preG.supplyCount[estate] - 1 == postG.supplyCount[estate]);
+        -:  114:
+        -:  115:    //the player should gain an estate at the highest hand pos
+        -:  116:    //ASSERT(postG.hand[thisPlayer][preG.handCount[thisPlayer] + 1] == estate);
+        -:  117:
+        -:  118:/* 
+        -:  119:    test 3:
+        -:  120:    to what happens when player chooses to gain an estate 
+        -:  121:*/
+        1:  122:    printf("\n\nTest 3:\n");
+        -:  123:
+        -:  124:    //set players hand
+        1:  125:    preG.hand[thisPlayer][0] = steward;
+        1:  126:	preG.hand[thisPlayer][1] = copper;
+        1:  127:	preG.hand[thisPlayer][2] = duchy;
+        1:  128:	preG.hand[thisPlayer][3] = feast;
+        1:  129:    preG.handCount[thisPlayer] = 4;
+        1:  130:    preG.supplyCount[estate] = 10;
+        -:  131:
+        1:  132:    memcpy(&postG, &preG, sizeof(struct gameState));
+        1:  133:	choice1 = 0;
+        1:  134:    discarded = 0;
+        1:  135:    buysGained = 1;
+        1:  136:    coinsGained = 0;
+        1:  137:    actionsGained = 0;
+        1:  138:    cardsGained = 1;
+        1:  139:	card_baron(choice1, &postG, thisPlayer, nextPlayer);
+        -:  140:
+        1:  141:    universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
+        -:  142:
+        1:  143:    ASSERT(postG.hand[thisPlayer][postG.handCount[thisPlayer]] == estate);
+        -:  144:
+        5:  145:    for(int i = 0; i < postG.handCount[thisPlayer]; i++)
+        -:  146:    {
+        4:  147:        printf("\nCard: %d\n", postG.hand[thisPlayer][i]);
+        -:  148:    }
+        1:  149:    ASSERT(preG.supplyCount[estate] - 1 == postG.supplyCount[estate]);
+        1:  150:    printf("preG supply expected:%d, postG actual:%d\n", preG.supplyCount[thisPlayer] - 1, postG.supplyCount[estate]);
+        -:  151:
+        -:  152:/*
+        -:  153:    test 4:
+        -:  154:    expected: to not gain an estate card, everything stays the same, except you get +1 buys
+        -:  155:*/
+        1:  156:    printf("\n\nTest 4:\n");
+        -:  157:
+        1:  158:    preG.hand[thisPlayer][0] = steward;
+        1:  159:	preG.hand[thisPlayer][1] = copper;
+        1:  160:	preG.hand[thisPlayer][2] = duchy;
+        1:  161:	preG.hand[thisPlayer][3] = estate;
+        1:  162:	preG.hand[thisPlayer][4] = feast;
+        1:  163:    preG.supplyCount[estate] = -1;
+        1:  164:    preG.handCount[thisPlayer] = 5;
+        -:  165:
+        1:  166:    memcpy(&postG, &preG, sizeof(struct gameState));
+        1:  167:	choice1 = 0;
+        1:  168:    discarded = 0;
+        1:  169:    buysGained = 1;
+        1:  170:    coinsGained = 0;
+        1:  171:    actionsGained = 0;
+        1:  172:    cardsGained = 0;
+        1:  173:	card_baron(choice1, &postG, thisPlayer, nextPlayer);
+        -:  174:
+        1:  175:    universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
+        -:  176:
+        1:  177:    ASSERT(postG.supplyCount[estate] == preG.supplyCount[estate]);
+        -:  178:
+        1:  179:    printf("\n\n-------------End Testing Baron---------------\n\n");
+        -:  180:
+        1:  181:    return 0;
+        -:  182:}

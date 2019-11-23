@@ -1145,12 +1145,13 @@ int card_mine(int *j, struct gameState *state, int currentPlayer, int choice1, i
             return -1;
         }
 
-        if (choice2 > treasure_map || choice2 < curse)
+
+        if (choice2 > treasure_map || choice2 < curse) //bug chosen!
         {
             return -1;
         }
 
-        if ( (getCost(state->hand[currentPlayer][choice1]) + 3) > getCost(choice2) )
+        if ( (getCost(state->hand[currentPlayer][choice1]) + 3) > getCost(choice2) ) //bug
         {
             return -1;
         }
@@ -1165,7 +1166,7 @@ int card_mine(int *j, struct gameState *state, int currentPlayer, int choice1, i
         {
             if (state->hand[currentPlayer][i] == *j)
             {
-                discardCard(i, currentPlayer, state, 0);
+                discardCard(i, currentPlayer, state, 0); //bug
                 break;
             }
         }
@@ -1178,8 +1179,10 @@ void card_baron(int choice1,struct gameState *state,int currentPlayer,int nextPl
         if (choice1 > 0) { //Boolean true or going to discard an estate
             int p = 0;//Iterator for hand!
             int card_not_discarded = 1;//Flag for discard set!
-            while(card_not_discarded) {
-                if (state->hand[currentPlayer][p] == estate) { //Found an estate card!
+            while(card_not_discarded) 
+            {
+                if (state->hand[currentPlayer][p] == estate) 
+                { //Found an estate card!
                     state->coins += 4;//Add 4 coins to the amount of coins
                     state->discard[currentPlayer][state->discardCount[currentPlayer]] = state->hand[currentPlayer][p];
                     state->discardCount[currentPlayer]++;
@@ -1301,10 +1304,10 @@ void card_tribute(struct gameState *state,int nextPlayer,int *tributeRevealedCar
                     state->deck[nextPlayer][i] = state->discard[nextPlayer][i];//Move to deck
                     state->deckCount[nextPlayer]++;
                     state->discard[nextPlayer][i] = -1;
-                    state->discardCount[nextPlayer]--;
+                    state->discardCount[nextPlayer]--; //bug 4
                 }
 
-                shuffle(currentPlayer,state);//Shuffle the deck   Shuffle the current_player's card!!!!!!!!!!!
+                shuffle(currentPlayer,state);//Shuffle the deck
             }
             tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer]-1];
             state->deck[nextPlayer][state->deckCount[nextPlayer]--] = -1;
@@ -1320,7 +1323,7 @@ void card_tribute(struct gameState *state,int nextPlayer,int *tributeRevealedCar
             tributeRevealedCards[1] = -1;
         }
 
-        for (i = 0; i <= 1; i ++) {     //The second card have no effect
+        for (i = 0; i <= 1; i ++) {     //The second card have no effect //BUG? maybe but not really
             if (tributeRevealedCards[i] == copper || tributeRevealedCards[i] == silver || tributeRevealedCards[i] == gold) { //Treasure cards
                 state->coins += 2;      
             }
@@ -1329,7 +1332,7 @@ void card_tribute(struct gameState *state,int nextPlayer,int *tributeRevealedCar
                 drawCard(currentPlayer, state);
                 drawCard(currentPlayer, state);
             }
-            else { //Action Card
+            else { //Action Card //BUG 3!! TEST 1 
                 state->numActions = state->numActions + 2;
             }
         }
@@ -1344,7 +1347,7 @@ int card_ambassador(int choice2,int choice1,int handPos, struct gameState *state
         return -1;
     }
 
-    if (choice1 != handPos) //when the choice of the current player is not suitable for their handle card, show false to the player.
+    if (choice1 == handPos) // !=//when the choice of the current player is not suitable for their handle card, show false to the player.
     {
         return -1;
     }

@@ -151,82 +151,87 @@
         1:  146:	preG.hand[thisPlayer][2] = duchy;
         1:  147:	preG.hand[thisPlayer][3] = estate;
         1:  148:	preG.hand[thisPlayer][4] = mine;
-        1:  149:    updateCoins(thisPlayer, &preG, 4);
-        -:  150:
-        1:  151:    memcpy(&postG, &preG, sizeof(struct gameState));
-        1:  152:	choice1 = 1;
-        1:  153:    choice2 = 11;
-        1:  154:    discarded = 0;
-        1:  155:    buysGained = 0;
-        1:  156:    coinsGained = 0;
-        1:  157:    actionsGained = 0;
-        1:  158:    cardsGained = 0;
-        1:  159:	card_mine(&j, &postG, thisPlayer, choice1, choice2, handpos);
-        -:  160:
-        1:  161:    universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
+        1:  149:    preG.handCount[thisPlayer] = 5;
+        1:  150:    handpos = 4;
+        1:  151:    updateCoins(thisPlayer, &preG, 4);
+        -:  152:
+        1:  153:    memcpy(&postG, &preG, sizeof(struct gameState));
+        1:  154:	choice1 = 1;
+        1:  155:    choice2 = 11;
+        1:  156:    discarded = 0;
+        1:  157:    buysGained = 0;
+        1:  158:    coinsGained = 0;
+        1:  159:    actionsGained = 0;
+        1:  160:    cardsGained = 0;
+        1:  161:	card_mine(&j, &postG, thisPlayer, choice1, choice2, handpos);
         -:  162:
-        -:  163:/* 
-        -:  164:    test 5: lose a estate, try to gain a mine
-        -:  165:    no change expected
-        -:  166:*/
+        1:  163:    universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
+        -:  164:
+        1:  165:    ASSERT(postG.hand[thisPlayer][choice1] == choice2);
+        -:  166:
         -:  167:
-        1:  168:    printf("\n\nTest 5:\n");
-        -:  169:
-        -:  170:    //set players hand
-        1:  171:    preG.hand[thisPlayer][0] = steward;
-        1:  172:	preG.hand[thisPlayer][1] = copper;
-        1:  173:	preG.hand[thisPlayer][2] = duchy;
-        1:  174:	preG.hand[thisPlayer][3] = estate;
-        1:  175:	preG.hand[thisPlayer][4] = copper;
-        1:  176:    updateCoins(thisPlayer, &preG, 4);
-        -:  177:
-        1:  178:    memcpy(&postG, &preG, sizeof(struct gameState));
-        1:  179:	choice1 = 3;
-        1:  180:    choice2 = 11;
-        1:  181:    discarded = 0;
-        1:  182:    buysGained = 0;
-        1:  183:    coinsGained = 0;
-        1:  184:    actionsGained = 0;
-        1:  185:    cardsGained = 0;
-        1:  186:	card_mine(&j, &postG, thisPlayer, choice1, choice2, handpos);
-        -:  187:
-        1:  188:    universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
-        -:  189:
-        5:  190:    for(int i = 0; i < postG.handCount[thisPlayer]; i++)
-        -:  191:    {
-        4:  192:        ASSERT(postG.hand[thisPlayer][i] != estate);
-        4:  193:        if(postG.hand[thisPlayer][i] == estate)
-        -:  194:        {
-    #####:  195:            printf("estate found in hand at position: %d\n", i);
-        -:  196:        }
-        -:  197:        
-        -:  198:    }
-        -:  199:
-        -:  200:/*
-        -:  201:    test 6: lose a silver, try to gain a gold
-        -:  202:    expect: to gain +2 coins
-        -:  203:*/
-        1:  204:    printf("\n\nTest 6:\n");
-        1:  205:    preG.hand[thisPlayer][0] = steward;
-        1:  206:	preG.hand[thisPlayer][1] = silver;
-        1:  207:	preG.hand[thisPlayer][2] = duchy;
-        1:  208:	preG.hand[thisPlayer][3] = estate;
-        1:  209:	preG.hand[thisPlayer][4] = mine;
-        1:  210:    updateCoins(thisPlayer, &preG, 4);
-        -:  211:
-        1:  212:    memcpy(&postG, &preG, sizeof(struct gameState));
-        1:  213:	choice1 = 1;
-        1:  214:    choice2 = 6;
-        1:  215:    discarded = 1;
-        1:  216:    buysGained = 0;
-        1:  217:    coinsGained = 2;
-        1:  218:    actionsGained = 0;
-        1:  219:    cardsGained = 1;
-        1:  220:	card_mine(&j, &postG, thisPlayer, choice1, choice2, handpos);
-        -:  221:
-        1:  222:    universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
-        -:  223:
-        1:  224:    printf("\n\n-----------------------------------End Testing Mine--------------------------------\n\n");
-        -:  225:
-        1:  226:    return 0;
-        -:  227:}
+        -:  168:/* 
+        -:  169:    test 5: lose a estate, try to gain a mine
+        -:  170:    no change expected
+        -:  171:*/
+        -:  172:
+        1:  173:    printf("\n\nTest 5:\n");
+        -:  174:
+        -:  175:    //set players hand
+        1:  176:    preG.hand[thisPlayer][0] = steward;
+        1:  177:	preG.hand[thisPlayer][1] = copper;
+        1:  178:	preG.hand[thisPlayer][2] = duchy;
+        1:  179:	preG.hand[thisPlayer][3] = estate;
+        1:  180:	preG.hand[thisPlayer][4] = copper;
+        1:  181:    updateCoins(thisPlayer, &preG, 4);
+        -:  182:
+        1:  183:    memcpy(&postG, &preG, sizeof(struct gameState));
+        1:  184:	choice1 = 3;
+        1:  185:    choice2 = 11;
+        1:  186:    discarded = 0;
+        1:  187:    buysGained = 0;
+        1:  188:    coinsGained = 0;
+        1:  189:    actionsGained = 0;
+        1:  190:    cardsGained = 0;
+        1:  191:	card_mine(&j, &postG, thisPlayer, choice1, choice2, handpos);
+        -:  192:
+        1:  193:    universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
+        -:  194:
+        5:  195:    for(int i = 0; i < postG.handCount[thisPlayer]; i++)
+        -:  196:    {
+        4:  197:        ASSERT(postG.hand[thisPlayer][i] != estate);
+        4:  198:        if(postG.hand[thisPlayer][i] == estate)
+        -:  199:        {
+    #####:  200:            printf("estate found in hand at position: %d\n", i);
+        -:  201:        }
+        -:  202:        
+        -:  203:    }
+        -:  204:
+        -:  205:/*
+        -:  206:    test 6: lose a silver, try to gain a gold
+        -:  207:    expect: to gain +2 coins
+        -:  208:*/
+        1:  209:    printf("\n\nTest 6:\n");
+        1:  210:    preG.hand[thisPlayer][0] = steward;
+        1:  211:	preG.hand[thisPlayer][1] = silver;
+        1:  212:	preG.hand[thisPlayer][2] = duchy;
+        1:  213:	preG.hand[thisPlayer][3] = estate;
+        1:  214:	preG.hand[thisPlayer][4] = mine;
+        1:  215:    updateCoins(thisPlayer, &preG, 4);
+        -:  216:
+        1:  217:    memcpy(&postG, &preG, sizeof(struct gameState));
+        1:  218:	choice1 = 1;
+        1:  219:    choice2 = 6;
+        1:  220:    discarded = 1;
+        1:  221:    buysGained = 0;
+        1:  222:    coinsGained = 2;
+        1:  223:    actionsGained = 0;
+        1:  224:    cardsGained = 1;
+        1:  225:	card_mine(&j, &postG, thisPlayer, choice1, choice2, handpos);
+        -:  226:
+        1:  227:    universalTest(&preG, &postG, discarded, cardsGained, buysGained, coinsGained, actionsGained, thisPlayer);
+        -:  228:
+        1:  229:    printf("\n\n-----------------------------------End Testing Mine--------------------------------\n\n");
+        -:  230:
+        1:  231:    return 0;
+        -:  232:}
