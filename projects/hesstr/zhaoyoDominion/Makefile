@@ -34,7 +34,7 @@ unittestresults: all unittest1.c unittest2.c unittest3.c unittest4.c dominion.o 
 	gcov -fb dominion.c >> unittestresults.out
 	cat dominion.c.gcov >> unittestresults.out
 
-randomtestresults: randomtestcard1.c randomtestcard2.c randomtestcard3.c
+randomtestresults: all randomtestcard1.c randomtestcard2.c randomtestcard3.c
 	gcc -fprofile-arcs -ftest-coverage -o randomtestcard1 -g randomtestcard1.c dominion.o rngs.o $(CFLAGS)
 	gcc -fprofile-arcs -ftest-coverage -o randomtestcard2 -g randomtestcard2.c dominion.o rngs.o $(CFLAGS)
 	gcc -fprofile-arcs -ftest-coverage -o randomtestcard3 -g randomtestcard3.c dominion.o rngs.o $(CFLAGS)
