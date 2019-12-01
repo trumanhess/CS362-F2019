@@ -1,0 +1,54 @@
+        -:    0:Source:unittestbug4.c
+        -:    0:Graph:unittestbug4.gcno
+        -:    0:Data:unittestbug4.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include "dominion.h"
+        -:    2:#include "dominion_helpers.h"
+        -:    3:#include <string.h>
+        -:    4:#include <stdio.h>
+        -:    5:#include "rngs.h"
+        -:    6:#include "custom_assert.h"
+        -:    7:
+        1:    8:int main()
+        -:    9:{
+        1:   10:    int cardsGained = 0;
+        1:   11:    int discarded = 0;
+        1:   12:    int coinsGained = 0;
+        1:   13:    int buysGained = 0;
+        1:   14:    int actionsGained = 0;
+        -:   15:
+        1:   16:    int choice1 = 0;
+        1:   17:    int seed = 1000;
+        1:   18:    int numPlayers = 2;
+        1:   19:    int thisPlayer = 0;
+        1:   20:    int nextPlayer = 1;
+        -:   21:	struct gameState preG, postG;
+        1:   22:	int k[10] = {adventurer, embargo, village, minion, mine, cutpurse,
+        -:   23:			sea_hag, baron, smithy, council_room};
+        -:   24:
+        1:   25:    printf("\n\n-------------Testing Bug 4---------\n\n");
+        1:   26:    initializeGame(numPlayers, k, seed, &preG);
+        -:   27:
+        -:   28:/* 
+        -:   29:    test 1: call isGameOver function with three things set to zero
+        -:   30:    expect: to not get a gameover
+        -:   31:*/
+        1:   32:    printf("\n\nTest 1:\n");
+        -:   33:
+      109:   34:    for(int i = 0; i < sizeof(preG.supplyCount); i++)
+        -:   35:    {
+      108:   36:        preG.supplyCount[i] = 10;
+        -:   37:    }
+        -:   38:
+        1:   39:    preG.supplyCount[26] = 0;
+        1:   40:    preG.supplyCount[0] = 0;
+        1:   41:    preG.supplyCount[1] = 0;
+        -:   42:
+        1:   43:    memcpy(&postG, &preG, sizeof(struct gameState));
+        1:   44:	ASSERT(isGameOver(&postG) == 0);
+        -:   45:
+        1:   46:    printf("\n\n-------------End Testing Bug 4---------------\n\n");
+        -:   47:
+        1:   48:    return 0;
+        -:   49:}
