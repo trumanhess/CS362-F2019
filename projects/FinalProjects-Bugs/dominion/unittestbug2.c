@@ -26,7 +26,7 @@ int main()
     initializeGame(numPlayers, k, seed, &preG);
 
 /* 
-    test 1: call minion case, trash silver and gain copper
+    test 1: call mine case, trash silver and gain copper
     expect: to not gain the copper
 */
     printf("\n\nTest 1:\n");

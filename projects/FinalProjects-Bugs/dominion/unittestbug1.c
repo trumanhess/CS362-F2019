@@ -26,7 +26,7 @@ int main()
     initializeGame(numPlayers, k, seed, &preG);
 
 /* 
-    test 1: call minion case, trash the chosen card
+    test 1: call mine case, trash the chosen card
     expect: chosen card to be untrashed
 */
     printf("\n\nTest 1:\n");
