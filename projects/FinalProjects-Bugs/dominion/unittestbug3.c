@@ -43,12 +43,14 @@ int main()
 
     preG.playedCardCount = 0;
 
+    preG.supplyCount[9] = 10;
+
     memcpy(&postG, &preG, sizeof(struct gameState));
 	cardEffect(12, 0, 9, 0, &postG, 1, 0);
 
     printf("\nCards in Discard pile:\n");
     printf("before: %d, after: %d\n", preG.discardCount[thisPlayer], postG.discardCount[thisPlayer]);
-    ASSERT(preG.discardCount[thisPlayer] + 1 == postG.discardCount[thisPlayer]);
+    ASSERT(preG.discardCount[thisPlayer] + 2 == postG.discardCount[thisPlayer]);
 
     printf("\n\n-------------End Testing Bug 3---------------\n\n");
 
