@@ -40,8 +40,8 @@ int main(int argc, char const *argv[]) {
 
 	g.deckCount[0] = 4;
 
-	assert(scoreFor(0, &g) == 23);
-
+	assert(scoreFor(0, &g) == 23);	//23 is the result of these card sum score
+	
 
 return 0;
 }
