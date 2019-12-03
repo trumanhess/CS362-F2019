@@ -38,21 +38,21 @@ UnitTest-bug7: dominion.o UnitTest-bug7.c
 
 
 rununit5: UnitTest-bug5
-	./UnitTest-bug5 &> unittest.out
-	gcov -b -f UnitTest-bug5.c >> unittest.out
-	cat UnitTest-bug5.c.gcov >> unittest.out
+	./UnitTest-bug5 &> unittestresults.out
+	gcov -b -f UnitTest-bug5.c >> unittestresults.out
+	cat UnitTest-bug5.c.gcov >> unittestresults.out
 
 rununit6: UnitTest-bug6
-	./UnitTest-bug6 &> unittest.out
-	gcov -b -f UnitTest-bug6.c >> unittest.out
-	cat UnitTest-bug6.c.gcov >> unittest.out
+	./UnitTest-bug6 &> unittestresults.out
+	gcov -b -f UnitTest-bug6.c >> unittestresults.out
+	cat UnitTest-bug6.c.gcov >> unittestresults.out
 
 rununit7: UnitTest-bug7
-	./UnitTest-bug7 &> unittest.out
-	gcov -b -f UnitTest-bug7.c >> unittest.out
-	cat UnitTest-bug7.c.gcov >> unittest.out
+	./UnitTest-bug7 &> unittestresults.out
+	gcov -b -f UnitTest-bug7.c >> unittestresults.out
+	cat UnitTest-bug7.c.gcov >> unittestresults.out
 
-runallunit: rununit5 rununit6 rununit7
+unittestresults: rununit5 rununit6 rununit7
 
 
 
