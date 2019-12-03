@@ -27,5 +27,40 @@ player: player.c interface.o
 
 all: playdom player 
 
+UnitTest-bug5: dominion.o UnitTest-bug5.c
+	gcc -o UnitTest-bug5 UnitTest-bug5.c -g dominion.o rngs.o $(CFLAGS)
+
+UnitTest-bug6: dominion.o UnitTest-bug6.c
+	gcc -o UnitTest-bug6 UnitTest-bug6.c -g dominion.o rngs.o $(CFLAGS)
+
+UnitTest-bug7: dominion.o UnitTest-bug7.c
+	gcc -o UnitTest-bug7 UnitTest-bug7.c -g dominion.o rngs.o $(CFLAGS)
+
+
+rununit5: UnitTest-bug5
+	./UnitTest-bug5 &> unittest.out
+	gcov -b -f UnitTest-bug5.c >> unittest.out
+	cat UnitTest-bug5.c.gcov >> unittest.out
+
+rununit6: UnitTest-bug6
+	./UnitTest-bug6 &> unittest.out
+	gcov -b -f UnitTest-bug6.c >> unittest.out
+	cat UnitTest-bug6.c.gcov >> unittest.out
+
+rununit7: UnitTest-bug7
+	./UnitTest-bug7 &> unittest.out
+	gcov -b -f UnitTest-bug7.c >> unittest.out
+	cat UnitTest-bug7.c.gcov >> unittest.out
+
+runallunit: rununit5 rununit6 rununit7
+
+
+
+
+
+
+
+
+
 clean:
 	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe
