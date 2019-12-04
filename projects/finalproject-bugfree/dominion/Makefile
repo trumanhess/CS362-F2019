@@ -47,7 +47,6 @@ unittestresults: all unittestbug1.c unittestbug2.c unittestbug3.c unittestbug4.c
 	gcov -fb dominion.c >> unittestresults.out
 	cat dominion.c.gcov >> unittestresults.out
 
-
 interface.o: interface.h interface.c
 	gcc -c interface.c -g  $(CFLAGS)
 
