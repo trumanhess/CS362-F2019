@@ -50,7 +50,7 @@
         -:   45:
         1:   46:    memcpy(&postG, &preG, sizeof(struct gameState));
         1:   47:	cardEffect(11, 0, 4, 0, &postG, 1, 0);
-        1:   48:    updateCoins(thisPlayer, &postG, 0); //UPDATED
+        1:   48:    updateCoins(thisPlayer, &postG, 0);
         -:   49:
         1:   50:    printf("\nCoins:\n");
         1:   51:    printf("before: %d, after: %d\n", preG.coins, postG.coins);

@@ -48,7 +48,7 @@
         -:   43:
         1:   44:    preG.playedCardCount = 0;
         -:   45:
-        1:   46:    preG.supplyCount[9] = 10; //updated
+        1:   46:    preG.supplyCount[9] = 10;
         -:   47:
         1:   48:    memcpy(&postG, &preG, sizeof(struct gameState));
         1:   49:	cardEffect(12, 0, 9, 0, &postG, 1, 0);

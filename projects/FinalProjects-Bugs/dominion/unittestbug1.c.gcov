@@ -31,7 +31,7 @@
         1:   26:    initializeGame(numPlayers, k, seed, &preG);
         -:   27:
         -:   28:/* 
-        -:   29:    test 1: call minion case, trash the chosen card
+        -:   29:    test 1: call mine case, trash the chosen card
         -:   30:    expect: chosen card to be untrashed
         -:   31:*/
         1:   32:    printf("\n\nTest 1:\n");

@@ -31,7 +31,7 @@
         1:   26:    initializeGame(numPlayers, k, seed, &preG);
         -:   27:
         -:   28:/* 
-        -:   29:    test 1: call minion case, trash silver and gain copper
+        -:   29:    test 1: call mine case, trash silver and gain copper
         -:   30:    expect: to not gain the copper
         -:   31:*/
         1:   32:    printf("\n\nTest 1:\n");
