@@ -7,17 +7,9 @@
 
 int main()
 {
-    int cardsGained = 0;
-    int discarded = 0;
-    int coinsGained = 0;
-    int buysGained = 0;
-    int actionsGained = 0;
-
-    int choice1 = 0;
     int seed = 1000;
     int numPlayers = 2;
     int thisPlayer = 0;
-    int nextPlayer = 1;
 	struct gameState preG, postG;
 	int k[10] = {adventurer, embargo, village, minion, mine, cutpurse,
 			sea_hag, baron, smithy, council_room};
