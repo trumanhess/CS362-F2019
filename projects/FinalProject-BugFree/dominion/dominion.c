@@ -467,7 +467,7 @@ int scoreFor (int player, struct gameState *state) {
     }
 
     //score from deck
-    for (i = 0; i < state->discardCount[player]; i++)
+    for (i = 0; i < state->deckCount[player]; i++)
     {
         if (state->deck[player][i] == curse) {
             score = score - 1;
@@ -769,6 +769,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
                 if (DEBUG) {
                     printf("Cards Left: %d\n", supplyCount(choice1, state));
                 }
+		return -1; //for debug purpose
             }
             else if (state->coins < getCost(choice1)) {
                 printf("That card is too expensive!\n");
@@ -776,6 +777,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
                 if (DEBUG) {
                     printf("Coins: %d < %d\n", state->coins, getCost(choice1));
                 }
+		return -1; 
             }
             else {
 
@@ -783,7 +785,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
                     printf("Deck Count: %d\n", state->handCount[currentPlayer] + state->deckCount[currentPlayer] + state->discardCount[currentPlayer]);
                 }
 
-                gainCard(choice1, state, 0, currentPlayer);//Gain the card
+                gainCard(choice1, state, 2, currentPlayer);//Gain the card
                 x = 0;//No more buying cards
 
                 if (DEBUG) {
@@ -1068,7 +1070,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
             tributeRevealedCards[1] = -1;
         }
 
-        for (i = 0; i <= 2; i ++) {
+        for (i = 0; i < 2; i ++) {
             if (tributeRevealedCards[i] == copper || tributeRevealedCards[i] == silver || tributeRevealedCards[i] == gold) { //Treasure cards
                 state->coins += 2;
             }
