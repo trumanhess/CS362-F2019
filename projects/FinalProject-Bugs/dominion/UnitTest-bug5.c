@@ -40,8 +40,12 @@ int main(int argc, char const *argv[]) {
 
 	g.deckCount[0] = 4;
 
-	assert(scoreFor(0, &g) == 23);	//23 is the result of these card sum score
-	
+	int total_score = scoreFor(0,&g);
+	printf("Score: %d\n",total_score);
+	printf("Expceted score: 29\n");
+
+	assert(total_score == 29);	//29 is the result of these card sum score
+	printf("Pass test!!!!!!!!!\n");
 
 return 0;
 }

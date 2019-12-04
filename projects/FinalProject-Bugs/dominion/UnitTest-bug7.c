@@ -24,17 +24,24 @@ int main(int argc, char const *argv[]) {
 	g.whoseTurn = 0;
 	g.handCount[1] = 2;
 	g.hand[1][0] = copper;
-	g.hand[1][1] = baron;
+	g.hand[1][1] = estate;
 	g.coins = 0;
 	g.numActions = 0;
 	g.handCount[0] = 0;
 
-	cardEffect(card, choice1, choice2, choice3, state, handPos, &bonus);
+	cardEffect(card, choice1, choice2, choice3, &g, handPos, &bonus);
+
+	printf("coins: %d\n", g.coins);
+	printf("Excepted coins: 2\n");
+	printf("numActions: %d\n", g.numActions);
+	printf("Excepted numActions: 0\n");
+	printf("handCount: %d\n", g.handCount[0]);
+	printf("Excepted handCount: 2\n");
 
 	assert(g.coins == 2);
-	assert(g.numActions == 2);
-	assetr(g.handCount[0] == 0);
-
+	assert(g.numActions == 0);
+	assert(g.handCount[0] == 2);
+	printf("Test passed !!!!!!!!!!!!!\n");
 
 
 return 0;

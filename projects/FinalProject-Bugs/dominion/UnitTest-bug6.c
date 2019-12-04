@@ -23,12 +23,41 @@ int main(int argc, char const *argv[]) {
 	initializeGame(numPlayers, k, seed, &g);
 	g.hand[0][0] = copper;
 	g.handCount[0] = 1;
+	g.supplyCount[gold] = 1;
 
-	cardEffect(card, choice1, choice2, choice3, state, handPos, &bonus);
+	int res = cardEffect(card, choice1, choice2, choice3, &g, handPos, &bonus);
+
+	printf("------------ Test 1 -------------\n");
+
+	printf("Return value: %d\n", res);
+	printf("Expected return value: -1\n");
+
+	assert(res == -1);
+
+	printf("HandCount value: %d\n", g.handCount[0]);
+	printf("Expected handCount value: 1\n");
 
 	assert(g.handCount[0] == 1);
 
+	printf("Test 1 passed !!!!!!\n");
 
+	initializeGame(numPlayers, k, seed, &g);
+	g.hand[0][0] = copper;
+	g.handCount[0] = 1;
+	g.supplyCount[copper] = 1;
+	choice1 = copper;
+	int res2 = cardEffect(card, choice1, choice2, choice3, &g, handPos, &bonus);
 
-return 0;
+	printf("------------Test 2 ---------------\n");
+
+	printf("Return value: %d\n", res2);
+	printf("Expected return value: 0\n");
+	printf("HandCount value: %d\n", g.handCount[0]);
+	printf("Expected handCount value: 2\n");
+
+	assert(res2 == 0);
+	assert(g.handCount[0] == 2);
+	printf("Test 2 passed !!!!!!\n");
+
+	return 0;
 }
