@@ -34,7 +34,7 @@ int main()
     preG.hand[nextPlayer][0] = gold;
 
     memcpy(&postG, &preG, sizeof(struct gameState));
-	cardEffect(ambassador, 1, 0, 0, &postG, 1, 0);
+	cardEffect(ambassador, 1, 1, 0, &postG, 1, 0);
 
     printf("\nHand Count (Next Player):\n");
     printf("before: %d, after: %d\n", preG.handCount[nextPlayer], postG.handCount[nextPlayer]); 
@@ -42,7 +42,7 @@ int main()
 
     printf("\nNext player has discarded card in hand:\n");
     printf("before: %d, after: %d\n", preG.hand[nextPlayer][0], postG.hand[nextPlayer][0]); 
-    ASSERT(preG.hand[nextPlayer][0] != postG.hand[nextPlayer][0]); // received new card
+    ASSERT(preG.hand[nextPlayer][0] != postG.hand[nextPlayer][1]); // received new card
 
     for(int i = 0; i < postG.handCount[nextPlayer]; i++)
     {

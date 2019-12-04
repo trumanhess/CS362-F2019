@@ -42,6 +42,10 @@ int main()
     printf("before: %d, after: %d\n", preG.coins, postG.coins);
     ASSERT(preG.coins + 2 == postG.coins);
 
+    printf("\nAction Increase:\n");
+    printf("before: %d, after: %d\n", preG.numActions, postG.numActions);
+    ASSERT(preG.numActions - 1 == postG.numActions);
+
     printf("\n\n-------------End Testing Bug 9---------------\n\n");
 
     return 0;
